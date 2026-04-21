@@ -212,13 +212,13 @@
         ],
         'St. Cyprian': [
             '【特权增幅仪式】：请找一枚硬币压在杯垫下，饮用时右手握杯，感受财富的重量注入身体。',
-            '【契约公证仪式】：在心中默念一个具体的数字或目标，饮用第一口后，用杯底压住小票（或纸张）。',
-            '【资源锚定仪式】：将手机背部贴紧杯壁感受冷冽，想象数字世界的资源正通过水分子被你锚定。'
+            '【契约公证仪式】：在心中默念一个具体的数字或目标，饮用第一口后，用杯底压住小票。',
+            '【资源锚定仪式】：将手机背部贴紧杯壁感受冷冽，想象数字世界的资源正被你锚定。'
         ],
         'Aphrodite': [
             '【魅力镜像仪式】：用手指沾一圈杯口的冷凝水点在耳后，在心中默念你想要吸引的状态。',
             '【引力对齐仪式】：举杯齐眉，注视杯中色彩，想象你的气场正在向外扩散出柔和的金光。',
-            '【联结修复仪式】：饮用前，请将酒杯顺时针旋转三圈，想象破损的关系正在被甜润的液态能量修复。'
+            '【联结修复仪式】：饮用前，请将酒杯顺时针旋转三圈，想象破损的关系正在被液态能量修复。'
         ]
     };
 
@@ -242,33 +242,41 @@
     }
 
     function upd(el) { document.getElementById(el.id+'-v').innerText = el.value+'%'; }
-    
     function showLore(g) { 
         document.getElementById('m-title').innerText = '灵知：' + g;
         document.getElementById('m-body').innerText = lores[g];
         document.getElementById('modal-overlay').style.display = 'flex';
         window.isFinal = false;
     }
-
-    function closeModal() {
-        document.getElementById('modal-overlay').style.display = 'none';
-        if(window.isFinal) sendOrder(document.getElementById('table-num').value);
-    }
+    function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
 
     function execute() {
         const table = document.getElementById('table-num').value;
         if(!table) return alert('请先输入桌号');
         
-        if(path === 'oracle') {
-            const list = oracleLibrary[god];
-            lastResult = list[Math.floor(Math.random()*list.length)];
-            generatePoster(table, '占卜结果');
-        } else {
-            const list = ritualLibrary[god];
-            lastResult = list[Math.floor(Math.random()*list.length)];
-            generatePoster(table, '仪式指令');
-        }
+        const list = path === 'oracle' ? oracleLibrary[god] : ritualLibrary[god];
+        lastResult = list[Math.floor(Math.random()*list.length)];
+        
+        generatePoster(table, path === 'oracle' ? 'Seeker of Oracle' : 'Act of Ritual');
         sendOrder(table);
+    }
+
+    // 智能换行函数
+    function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+        let words = text.split('');
+        let line = '';
+        for(let n = 0; n < words.length; n++) {
+            let testLine = line + words[n];
+            let metrics = ctx.measureText(testLine);
+            if (metrics.width > maxWidth && n > 0) {
+                ctx.fillText(line, x, y);
+                line = words[n];
+                y += lineHeight;
+            } else {
+                line = testLine;
+            }
+        }
+        ctx.fillText(line, x, y);
     }
 
     function generatePoster(table, typeTitle) {
@@ -294,15 +302,10 @@
         ctx.fillStyle = '#888';
         ctx.fillText(`TABLE ${table} / ${typeTitle}`, 300, 380);
         
+        // 核心改动：智能换行渲染
         ctx.fillStyle = '#fff';
         ctx.font = 'bold 28px sans-serif';
-        const words = lastResult;
-        if(words.length > 15) {
-            ctx.fillText(words.substring(0,15), 300, 500);
-            ctx.fillText(words.substring(15), 300, 540);
-        } else {
-            ctx.fillText(words, 300, 520);
-        }
+        wrapText(ctx, lastResult, 300, 500, 440, 45);
 
         ctx.font = 'italic 16px serif';
         ctx.fillStyle = '#3a3a3a';
