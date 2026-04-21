@@ -3,86 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Crossing | 数字化特调</title>
+    <title>Crossing | 神秘调配</title>
     <style>
+        /* 魔法星空背景 */
         body { 
-            background-color: #0a0a0a; 
+            background: radial-gradient(circle at center, #1b1b1b 0%, #000 100%);
             color: #ffffff; 
-            font-family: -apple-system, sans-serif; 
+            font-family: 'PingFang SC', 'Noto Serif SC', serif; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
             margin: 0;
             padding: 40px 0;
             min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* 动态星尘效果 */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(#ffffff22 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            animation: starMove 100s linear infinite;
+        }
+
+        @keyframes starMove { from { background-position: 0 0; } to { background-position: 1000px 1000px; } }
+
+        .container { width: 85%; max-width: 400px; text-align: center; }
+        
+        h1 { 
+            color: #e6b17a; font-size: 32px; font-weight: 300; letter-spacing: 6px; 
+            margin-bottom: 5px; text-shadow: 0 0 15px rgba(230, 177, 122, 0.5);
+        }
+        .subtitle { color: #888; font-size: 10px; margin-bottom: 35px; letter-spacing: 2px; text-transform: uppercase; }
+
+        /* 口味称号显示 */
+        #magic-rank { 
+            font-size: 14px; color: #e6b17a; margin-bottom: 25px; 
+            min-height: 20px; font-style: italic; opacity: 0.8;
+        }
+
+        .slider-group { 
+            margin-bottom: 25px; text-align: left; background: rgba(20, 20, 20, 0.8); 
+            padding: 18px; border-radius: 20px; border: 1px solid rgba(230, 177, 122, 0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         
-        .container { width: 85%; max-width: 400px; text-align: center; }
-        h1 { color: #e6b17a; font-size: 28px; font-weight: 300; letter-spacing: 4px; margin-bottom: 5px; }
-        .subtitle { color: #555; font-size: 11px; margin-bottom: 35px; letter-spacing: 1px; }
-
-        /* 滑块组样式 */
-        .slider-group { margin-bottom: 30px; text-align: left; background: #111; padding: 15px; border-radius: 15px; border: 1px solid #1a1a1a; }
-        label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; color: #aaa; font-size: 13px; }
-        .icon-label { font-size: 18px; margin-right: 8px; }
+        label { display: block; margin-bottom: 12px; color: #888; font-size: 12px; letter-spacing: 1px; }
         
-        input[type=range] { width: 100%; height: 4px; background: #333; border-radius: 5px; appearance: none; outline: none; }
-        input[type=range]::-webkit-slider-thumb { appearance: none; width: 22px; height: 22px; background: #e6b17a; border-radius: 50%; cursor: pointer; box-shadow: 0 0 8px rgba(230, 177, 122, 0.4); }
+        input[type=range] { width: 100%; height: 2px; background: #333; appearance: none; outline: none; }
+        input[type=range]::-webkit-slider-thumb { 
+            appearance: none; width: 18px; height: 18px; background: #e6b17a; 
+            border-radius: 50%; cursor: pointer; box-shadow: 0 0 15px #e6b17a;
+        }
 
-        .value-display { margin-top: 10px; color: #e6b17a; font-size: 16px; text-align: right; font-weight: 500; }
+        .value-display { margin-top: 10px; color: #e6b17a; font-size: 16px; text-align: right; }
 
-        /* 下单区 */
-        .order-section { margin-top: 30px; }
-        #table-num { padding: 15px; border-radius: 12px; border: 1px solid #222; background: #111; color: #fff; width: 100%; margin-bottom: 20px; box-sizing: border-box; font-size: 16px; text-align: center; outline: none; }
-        #table-num:focus { border-color: #e6b17a; }
+        #table-num { 
+            padding: 16px; border-radius: 15px; border: 1px solid #333; background: transparent; 
+            color: #fff; width: 100%; margin-bottom: 25px; box-sizing: border-box; 
+            font-size: 16px; text-align: center; border-color: rgba(230, 177, 122, 0.3);
+        }
 
-        #submit-btn { background: linear-gradient(135deg, #e6b17a, #b08e66); color: #000; border: none; padding: 18px; border-radius: 35px; width: 100%; font-weight: bold; font-size: 18px; cursor: pointer; box-shadow: 0 4px 20px rgba(230, 177, 122, 0.2); }
-        #submit-btn:active { transform: scale(0.96); opacity: 0.8; }
+        #submit-btn { 
+            background: transparent; border: 1px solid #e6b17a; color: #e6b17a; 
+            padding: 18px; border-radius: 40px; width: 100%; font-weight: bold; 
+            font-size: 16px; cursor: pointer; letter-spacing: 2px;
+            transition: all 0.4s; position: relative; overflow: hidden;
+        }
+
+        #submit-btn:hover { background: rgba(230, 177, 122, 0.1); box-shadow: 0 0 20px rgba(230, 177, 122, 0.3); }
+        #submit-btn:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>CROSSING</h1>
-    <div class="subtitle">STRATEGIC COCKTAIL CRAFTING</div>
+    <div class="subtitle">Personal Alchemical Formula</div>
+
+    <div id="magic-rank">正在感应您的口味偏好...</div>
 
     <div class="slider-group">
-        <label><span>🍋 酸度 ACIDITY</span></label>
+        <label>🍋 酸度 ACIDITY</label>
         <input type="range" id="acid-slider" min="0" max="100" value="50">
         <div class="value-display"><span id="acid-value">50</span>%</div>
     </div>
 
     <div class="slider-group">
-        <label><span>🍯 甜度 SWEETNESS</span></label>
+        <label>🍯 甜度 SWEETNESS</label>
         <input type="range" id="sweet-slider" min="0" max="100" value="50">
         <div class="value-display"><span id="sweet-value">50</span>%</div>
     </div>
 
     <div class="slider-group">
-        <label><span>🌿 苦感 BITTERNESS</span></label>
+        <label>🌿 苦感 BITTERNESS</label>
         <input type="range" id="bitter-slider" min="0" max="100" value="0">
         <div class="value-display"><span id="bitter-value">0</span>%</div>
     </div>
 
     <div class="slider-group">
-        <label><span>🥃 酒精度 STRENGTH</span></label>
+        <label>🥃 酒精度 STRENGTH</label>
         <input type="range" id="strength-slider" min="0" max="100" value="50">
         <div class="value-display"><span id="strength-value">50</span>%</div>
     </div>
 
     <div class="order-section">
-        <input type="text" id="table-num" placeholder="输入桌号 (如: A01)" autocomplete="off">
-        <button onclick="sendOrder()" id="submit-btn">发送需求给调酒师</button>
+        <input type="text" id="table-num" placeholder="于何处降临 (桌号)" autocomplete="off">
+        <button onclick="sendOrder()" id="submit-btn">注入以太完成点单</button>
     </div>
 </div>
 
 <script>
-    // 数值动态显示逻辑
     const sliders = ['acid', 'sweet', 'bitter', 'strength'];
+    const rankMsg = document.getElementById('magic-rank');
+
+    function updateRank() {
+        const a = parseInt(document.getElementById('acid-slider').value);
+        const s = parseInt(document.getElementById('sweet-slider').value);
+        const b = parseInt(document.getElementById('bitter-slider').value);
+        const l = parseInt(document.getElementById('strength-slider').value);
+
+        let rank = "正在调和元素...";
+        if (l > 80) rank = "「 混沌的烈焰 」";
+        else if (b > 70) rank = "「 冥府的根茎 」";
+        else if (a > 70 && s > 70) rank = "「 禁忌的甘露 」";
+        else if (a < 20 && s < 20 && b < 20) rank = "「 纯净的虚空 」";
+        else rank = "「 均衡的法则 」";
+        
+        rankMsg.innerText = rank;
+    }
+
     sliders.forEach(id => {
         const s = document.getElementById(id + '-slider');
         const v = document.getElementById(id + '-value');
-        s.oninput = function() { v.innerText = this.value; }
+        s.oninput = function() { 
+            v.innerText = this.value;
+            updateRank();
+        }
     });
 
     function sendOrder() {
@@ -93,24 +154,26 @@
         const strength = document.getElementById('strength-value').innerText;
         const btn = document.getElementById('submit-btn');
 
-        if(!table) { alert('请填写桌号'); return; }
+        if(!table) { alert('请指定您的方位（桌号）'); return; }
 
-        btn.innerText = "正在传送魔法...";
+        btn.innerText = "正在穿越以太层...";
         btn.disabled = true;
 
         const pushKey = "PDU40747TdeTeirMy2wQe12azBvWvUBOk9S5WjMtt"; 
-        const title = encodeURIComponent(`Crossing新订单：${table}桌`);
-        const content = encodeURIComponent(`🍋酸:${acid} | 🍯甜:${sweet} | 🌿苦:${bitter} | 🥃烈:${strength}`);
+        const title = encodeURIComponent(`Crossing仪式：${table}桌`);
+        const content = encodeURIComponent(`酸:${acid} 甜:${sweet} 苦:${bitter} 烈:${strength}`);
 
-        // 使用 Image 对象发送（最稳方案）
         const sender = new Image();
         sender.onload = sender.onerror = function() {
-            alert('口味需求已送达！');
-            btn.innerText = "发送需求给调酒师";
+            alert('仪式已完成，调酒师墨霖已接收。');
+            btn.innerText = "注入以太完成点单";
             btn.disabled = false;
         };
         sender.src = `https://api2.pushdeer.com/message/push?pushkey=${pushKey}&text=${title}&desp=${content}&t=${new Date().getTime()}`;
     }
+    
+    // 初始化称号
+    updateRank();
 </script>
 
 </body>
