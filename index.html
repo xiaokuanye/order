@@ -7,7 +7,7 @@
     <style>
         :root { --gold: #e6b17a; --bg: #0a0a0a; --card: #1a1a1a; --text: #ddd; --bad: #7c0000; }
         body { background: var(--bg); color: var(--text); font-family: -apple-system, "Noto Sans SC", serif; margin: 0; padding: 0; overflow-x: hidden; }
-        .container { width: 92%; max-width: 500px; margin: 0 auto; padding: 40px 0 120px 0; }
+        .container { width: 92%; max-width: 500px; margin: 0 auto; padding: 40px 0 120px 0; transition: 0.5s; }
         header { text-align: center; margin-bottom: 40px; }
         h1 { font-size: 2.8rem; letter-spacing: 10px; color: var(--gold); margin: 0; font-weight: 300; }
         .intro-text { font-size: 14px; color: #666; margin-top: 15px; letter-spacing: 2px; }
@@ -15,39 +15,49 @@
         .step-num { color: var(--gold); font-size: 11px; font-weight: bold; margin-bottom: 12px; display: block; opacity: 0.6; }
         .step-title { font-size: 18px; margin-bottom: 20px; color: #fff; text-align: left; }
         
-        /* 按钮与选择样式 */
-        .path-group { display: flex; gap: 12px; }
-        .path-btn { flex: 1; padding: 18px 5px; border: 1px solid #333; border-radius: 16px; background: #111; color: #777; font-size: 14px; cursor: pointer; transition: 0.3s; }
-        .path-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(230,177,122,0.1); }
-        
+        /* 原型力量滚动区 */
         .god-scroll { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 15px; scrollbar-width: none; }
         .god-scroll::-webkit-scrollbar { display: none; }
-        .god-card { min-width: 160px; padding: 20px 10px; background: #111; border: 1px solid #333; border-radius: 20px; text-align: center; transition: 0.4s; flex-shrink: 0; }
+        .god-card { min-width: 140px; padding: 20px 10px; background: #111; border: 1px solid #333; border-radius: 20px; text-align: center; transition: 0.4s; flex-shrink: 0; }
         .god-card.active { border-color: var(--gold); background: rgba(230,177,122,0.08); transform: translateY(-5px); }
+        .god-img-wrap { width: 70px; height: 70px; border-radius: 50%; border: 2px solid #333; margin: 0 auto 15px auto; overflow: hidden; position: relative; }
+        .god-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); transition: 0.4s; }
+        .god-card.active .god-img { filter: grayscale(0%); }
+        .god-name { font-size: 17px; font-weight: bold; margin-bottom: 8px; color: var(--gold); }
+        .god-tag { font-size: 11px; color: #555; }
+
+        .path-group { display: flex; gap: 12px; }
+        .path-btn { flex: 1; padding: 18px 5px; border: 1px solid #333; border-radius: 16px; background: #111; color: #777; font-size: 14px; cursor: pointer; }
+        .path-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(230,177,122,0.1); }
         
         .slider-item { margin-bottom: 25px; }
         .slider-label { display: flex; justify-content: space-between; font-size: 12px; color: #888; margin-bottom: 10px; }
-        .slider-val { color: var(--gold); font-weight: bold; }
         input[type=range] { width: 100%; height: 3px; background: #333; appearance: none; outline: none; }
         input[type=range]::-webkit-slider-thumb { appearance: none; width: 22px; height: 22px; background: var(--gold); border-radius: 50%; border: 4px solid #000; }
-        
-        /* 任务栏样式 */
-        .task-list { display: flex; flex-direction: column; gap: 10px; }
-        .task-item { padding: 15px; border: 1px solid #333; border-radius: 12px; background: #111; color: #666; font-size: 13px; cursor: pointer; transition: 0.3s; }
-        .task-item.active { border-color: var(--gold); color: var(--gold); background: rgba(230,177,122,0.05); }
 
         .footer-action { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(10,10,10,0.9); backdrop-filter: blur(15px); padding: 20px 0; border-top: 1px solid #222; text-align: center; z-index: 100; }
         #table-num { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; color: var(--gold); text-align: center; font-size: 18px; padding: 12px; width: 100px; margin-right: 10px; outline: none; }
         #submit-btn { padding: 15px 35px; border-radius: 12px; border: none; background: var(--gold); color: #000; font-size: 17px; font-weight: bold; cursor: pointer; }
-        
+
+        .task-modal { 
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            width: 85%; max-width: 380px; background: #1a1a1a; border: 2px solid var(--gold); border-radius: 30px;
+            padding: 40px 20px; z-index: 3000; text-align: center; box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        }
+        .task-content { color: #fff; font-size: 16px; margin: 25px 0; line-height: 1.6; border-top: 1px solid #333; border-bottom: 1px solid #333; padding: 20px 0; }
+        .task-prize { color: var(--gold); font-weight: bold; margin-bottom: 30px; display: block; }
+        .modal-btns { display: flex; gap: 10px; }
+        .modal-btns button { flex: 1; padding: 15px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; }
+        .btn-accept { background: var(--gold); color: #000; }
+        .btn-ignore { background: #333; color: #888; }
+
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; flex-direction: column; align-items: center; justify-content: center; }
-        .poster-container { width: 85%; max-width: 350px; text-align: center; }
-        #poster-img { width: 100%; border-radius: 15px; box-shadow: 0 0 30px rgba(230,177,122,0.2); }
+        #poster-img { width: 85%; max-width: 350px; border-radius: 15px; }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="container" id="main-ui">
     <header>
         <h1>CROSSING</h1>
         <div class="intro-text">意志即配方 · 调配你的战略契约</div>
@@ -67,14 +77,17 @@
         <div class="step-title">原型力量：</div>
         <div class="god-scroll">
             <div class="god-card active" id="card-hekate" onclick="selectGod('Hekate')">
+                <div class="god-img-wrap"><img src="hekate.jpg" class="god-img"></div>
                 <div class="god-name">HEKATE</div>
                 <div class="god-tag">守护 / 路径 / 驱邪</div>
             </div>
             <div class="god-card" id="card-cyprian" onclick="selectGod('St. Cyprian')">
+                <div class="god-img-wrap"><img src="cyprian.jpg" class="god-img"></div>
                 <div class="god-name">ST. CYPRIAN</div>
                 <div class="god-tag">财富 / 契约 / 事业</div>
             </div>
             <div class="god-card" id="card-aphrodite" onclick="selectGod('Aphrodite')">
+                <div class="god-img-wrap"><img src="aphrodite.jpg" class="god-img"></div>
                 <div class="god-name">APHRODITE</div>
                 <div class="god-tag">魅力 / 爱情 / 联结</div>
             </div>
@@ -93,34 +106,32 @@
             <input type="range" id="strength" min="0" max="100" value="50" oninput="upd(this)">
         </div>
     </div>
-
-    <div class="step-box">
-        <span class="step-num">STEP 04. CHALLENGE (OPTIONAL)</span>
-        <div class="step-title">接受契约挑战以换取奖励：</div>
-        <div class="task-list">
-            <div class="task-item active" id="task-none" onclick="selectTask(-1, this)">◉ 不参加任务</div>
-            <div class="task-item" onclick="selectTask(0, this)">◈【沉默供奉】放下手机15分钟，观察冰块消融。</div>
-            <div class="task-item" onclick="selectTask(1, this)">◈【真名公证】在杯垫写下渴望的力量并去洗手间默念真名。</div>
-            <div class="task-item" onclick="selectTask(2, this)">◈【物质投射】发布海报配文‘意志即配方’，3分钟不看手机。</div>
-        </div>
-    </div>
 </div>
 
 <div class="footer-action">
     <input type="text" id="table-num" placeholder="桌号">
-    <button id="submit-btn" onclick="execute()">开启仪式</button>
+    <button id="submit-btn" onclick="startRitual()">开启仪式</button>
 </div>
 
-<div id="poster-overlay" class="overlay">
-    <div class="poster-container">
-        <canvas id="canvas-poster" width="600" height="900" style="display:none;"></canvas>
-        <img id="poster-img" src="">
-        <button onclick="location.reload()" style="margin-top:20px; background:transparent; border:1px solid #444; color:#888; padding:10px 25px; border-radius:20px; cursor:pointer;">返回法典</button>
+<div id="task-modal" class="task-modal">
+    <h2 style="color:var(--gold); margin:0;">✦ 契约挑战 ✦</h2>
+    <p style="color:#666; font-size:12px; margin-top:5px;">检测到因果偏移，是否接受挑战？</p>
+    <div class="task-content" id="task-text"></div>
+    <span class="task-prize" id="task-prize"></span>
+    <div class="modal-btns">
+        <button class="btn-ignore" onclick="finalize(false)">仅看神谕</button>
+        <button class="btn-accept" onclick="finalize(true)">接受挑战</button>
     </div>
 </div>
 
+<div id="poster-overlay" class="overlay">
+    <canvas id="canvas-poster" width="600" height="900" style="display:none;"></canvas>
+    <img id="poster-img" src="">
+    <button onclick="location.reload()" style="margin-top:20px; background:transparent; border:1px solid #444; color:#888; padding:10px 25px; border-radius:20px; cursor:pointer;">返回法典</button>
+</div>
+
 <script>
-    let path = 'oracle', god = 'Hekate', selectedTaskIndex = -1;
+    let path = 'oracle', god = 'Hekate', currentTask = null;
 
     const goodOracles = {
         'Hekate': ['【大吉】女神提灯，前方无伏兵。', '【吉】阴影消散，守中即可。', '【中吉】十字路口，直觉为先。'],
@@ -135,7 +146,7 @@
     };
 
     const taskLibrary = [
-        { title: "沉默供奉", text: "放下手机观察冰块消融15分钟。完成后展示此契约。", prize: "静默之水" },
+        { title: "沉默供奉", text: "放下手机观察冰块消融15分钟。完成后展示海报给调酒师。", prize: "静默之水" },
         { title: "真名公证", text: "在杯垫写下渴望的力量并去洗手间念真名。交回杯垫。", prize: "契约之饮" },
         { title: "物质投射", text: "发布海报配文‘意志即配方’，3分钟内不看手机。", prize: "概率之饮" }
     ];
@@ -153,31 +164,27 @@
         document.getElementById(id).classList.add('active');
     }
 
-    function selectTask(index, el) {
-        selectedTaskIndex = index;
-        document.querySelectorAll('.task-item').forEach(t => t.classList.remove('active'));
-        el.classList.add('active');
-    }
-
     function upd(el) { document.getElementById(el.id + '-v').innerText = el.value + '%'; }
 
-    function execute() {
+    function startRitual() {
         const table = document.getElementById('table-num').value;
         if(!table) return alert('输入桌号以固定因果');
+        currentTask = taskLibrary[Math.floor(Math.random() * taskLibrary.length)];
+        document.getElementById('task-text').innerText = `【${currentTask.title}】\n${currentTask.text}`;
+        document.getElementById('task-prize').innerText = `任务奖励：[${currentTask.prize}]`;
+        document.getElementById('task-modal').style.display = 'block';
+        document.getElementById('main-ui').style.opacity = '0.3';
+    }
 
-        let oracleResult = "";
-        let isBad = false;
-
-        // 纯粹占卜：10% 凶，90% 吉
-        if (Math.random() < 0.10) { 
-            isBad = true;
-            oracleResult = badOracles[god][Math.floor(Math.random() * badOracles[god].length)];
-        } else {
-            oracleResult = goodOracles[god][Math.floor(Math.random() * goodOracles[god].length)];
-        }
+    function finalize(acceptTask) {
+        const table = document.getElementById('table-num').value;
+        document.getElementById('task-modal').style.display = 'none';
+        let oracleResult = (Math.random() < 0.10) 
+            ? badOracles[god][Math.floor(Math.random() * badOracles[god].length)]
+            : goodOracles[god][Math.floor(Math.random() * goodOracles[god].length)];
         
-        generatePoster(table, oracleResult, isBad);
-        sendOrder(table, oracleResult);
+        generatePoster(table, oracleResult, oracleResult.includes('凶'), acceptTask);
+        sendOrder(table, oracleResult, acceptTask);
     }
 
     function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
@@ -189,19 +196,14 @@
                 ctx.fillText(line, x, y);
                 line = words[n];
                 y += lineHeight;
-            } else {
-                line = testLine;
-            }
+            } else { line = testLine; }
         }
         ctx.fillText(line, x, y);
     }
 
-    function generatePoster(table, oracle, isBad) {
+    function generatePoster(table, oracle, isBad, hasTask) {
         const canvas = document.getElementById('canvas-poster');
         const ctx = canvas.getContext('2d');
-        const acid = document.getElementById('acid').value;
-        const strength = document.getElementById('strength').value;
-        const hasTask = selectedTaskIndex !== -1;
         const themeColor = isBad ? '#7c0000' : '#e6b17a';
 
         ctx.fillStyle = '#0a0a0a';
@@ -221,42 +223,35 @@
 
         ctx.font = '18px sans-serif';
         ctx.fillStyle = '#444';
-        ctx.fillText(`ACIDITY: ${acid}% / STRENGTH: ${strength}%`, 300, 310);
+        ctx.fillText(`ACIDITY: ${document.getElementById('acid').value}% / STRENGTH: ${document.getElementById('strength').value}%`, 300, 310);
 
-        // 绘制神谕内容
         ctx.fillStyle = isBad ? '#7c0000' : '#fff';
         ctx.font = 'bold 32px sans-serif';
         wrapText(ctx, oracle, 300, 420, 440, 55);
 
-        // 如果有任务，绘制任务分割线和任务内容
-        if(hasTask) {
-            const task = taskLibrary[selectedTaskIndex];
+        if(hasTask && currentTask) {
             ctx.strokeStyle = '#333';
             ctx.beginPath(); ctx.moveTo(100, 580); ctx.lineTo(500, 580); ctx.stroke();
-
             ctx.fillStyle = '#e6b17a';
             ctx.font = 'bold 22px sans-serif';
-            ctx.fillText(`CHALLENGE: ${task.title}`, 300, 630);
-            
+            ctx.fillText(`CHALLENGE: ${currentTask.title}`, 300, 630);
             ctx.fillStyle = '#888';
             ctx.font = '18px sans-serif';
-            wrapText(ctx, task.text, 300, 675, 400, 30);
-            
+            wrapText(ctx, currentTask.text, 300, 675, 400, 30);
             ctx.fillStyle = '#fff';
-            ctx.fillText(`REWARD: [${task.prize}]`, 300, 760);
+            ctx.fillText(`REWARD: [${currentTask.prize}]`, 300, 760);
         }
 
         ctx.font = 'italic 16px serif';
         ctx.fillStyle = '#333';
         ctx.fillText(`TABLE ${table} · CROSSING BAR`, 300, 825);
-
         document.getElementById('poster-img').src = canvas.toDataURL('image/png');
         document.getElementById('poster-overlay').style.display = 'flex';
     }
 
-    function sendOrder(table, res) {
-        const taskName = selectedTaskIndex !== -1 ? taskLibrary[selectedTaskIndex].title : "无";
-        const desc = encodeURIComponent(`桌:${table}\n路:${path}\n神:${god}\n内容:${res}\n任务:${taskName}`);
+    function sendOrder(table, res, hasTask) {
+        const taskName = hasTask ? currentTask.title : "无";
+        const desc = encodeURIComponent(`桌:${table}\n路:${path}\n神:${god}\n酸:${document.getElementById('acid').value} 酒:${document.getElementById('strength').value}\n结:${res}\n任:${taskName}`);
         new Image().src = `https://api2.pushdeer.com/message/push?pushkey=PDU40747TdeTeirMy2wQe12azBvWvUBOk9S5WjMtt&text=Crossing_${table}&desp=${desc}`;
     }
 </script>
