@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>灵感调酒柜 - 视觉定制版</title>
+    <style>
+        :root {
+            --primary: #e6b17a;
+            --bg: #121212;
+            --card: #1e1e1e;
+            --text: #ffffff;
+        }
+
+        body {
+            font-family: 'PingFang SC', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0; padding: 20px;
+            display: flex; justify-content: center;
+        }
+
+        .container {
+            width: 100%; max-width: 450px;
+            background: var(--card);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+
+        /* 图片展示区 */
+        .image-display {
+            position: relative;
+            width: 100%; height: 280px;
+            background: #252525;
+            overflow: hidden;
+        }
+
+        #cocktail-img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease, opacity 0.3s;
+        }
+
+        .img-overlay {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            padding: 20px;
+        }
+
+        #recipe-name {
+            font-size: 1.5rem; font-weight: bold; color: var(--primary);
+        }
+
+        /* 控制区 */
+        .controls { padding: 20px; }
+
+        .control-group { margin-bottom: 20px; }
+
+        label {
+            display: flex; justify-content: space-between;
+            margin-bottom: 10px; font-size: 0.9rem; color: #bbb;
+        }
+
+        input[type="range"] {
+            width: 100%; height: 6px;
+            background: #333; border-radius: 5px;
+            outline: none; accent-color: var(--primary);
+        }
+
+        .desc-box {
+            background: #252525; padding: 15px;
+            border-radius: 12px; margin-top: 10px;
+            font-size: 0.85rem; line-height: 1.5; color: #ddd;
+        }
+
+        .order-btn {
+            width: 100%; background: var(--primary);
+            color: #000; border: none;
+            padding: 16px; border-radius: 12px;
+            font-size: 1rem; font-weight: bold;
+            margin-top: 20px; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="image-display">
+        <img id="cocktail-img" src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=500&auto=format" alt="鸡尾酒">
+        <div class="img-overlay">
+            <div id="recipe-name">经典马天尼风格</div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <div class="control-group">
+            <label>酸度强度 (Sour) <span id="sour-val">50%</span></label>
+            <input type="range" id="sour" min="0" max="100" value="50">
+        </div>
+
+        <div class="control-group">
+            <label>甜度强度 (Sweet) <span id="sweet-val">50%</span></label>
+            <input type="range" id="sweet" min="0" max="100" value="50">
+        </div>
+
+        <div class="desc-box" id="recipe-desc">
+            正在根据您的口味调整配方...
+        </div>
+
+        <button class="order-btn" onclick="submitOrder()">下单我的专属特调</button>
+    </div>
+</div>
+
+<script>
+    const recipes = {
+        balanced: {
+            name: "黄金平衡线",
+            desc: "这是调酒师推荐的完美比例，酸甜适中，口感圆润，适合第一次尝试的你。",
+            img: "https://images.unsplash.com/photo-1536935338788-846bb9981813?w=500&auto=format"
+        },
+        sour: {
+            name: "极地清晨",
+            desc: "强烈的柑橘酸味唤醒味蕾，搭配大量碎冰，是消暑去腻的不二之选。",
+            img: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=500&auto=format"
+        },
+        sweet: {
+            name: "落日余晖",
+            desc: "浓郁的果糖与蜂蜜香气，口感丝滑甜美，像是一场液体甜点的邂逅。",
+            img: "https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=500&auto=format"
+        },
+        extreme: {
+            name: "热带狂欢",
+            desc: "浓郁的酸与饱和的甜在口中碰撞，风味极度饱满，充满南洋异域风情。",
+            img: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&auto=format"
+        }
+    };
+
+    function updateApp() {
+        const s = document.getElementById('sour').value;
+        const w = document.getElementById('sweet').value;
+        
+        document.getElementById('sour-val').innerText = s + '%';
+        document.getElementById('sweet-val').innerText = w + '%';
+
+        let config;
+        // 核心判断逻辑
+        if (s > 65 && w < 35) config = recipes.sour;
+        else if (w > 65 && s < 35) config = recipes.sweet;
+        else if (s > 65 && w > 65) config = recipes.extreme;
+        else config = recipes.balanced;
+
+        // 更新界面
+        const imgEl = document.getElementById('cocktail-img');
+        if(imgEl.src !== config.img) {
+            imgEl.style.opacity = 0.5;
+            setTimeout(() => {
+                imgEl.src = config.img;
+                imgEl.style.opacity = 1;
+            }, 200);
+        }
+        document.getElementById('recipe-name').innerText = config.name;
+        document.getElementById('recipe-desc').innerText = config.desc;
+    }
+
+    document.querySelectorAll('input').forEach(i => i.oninput = updateApp);
+    updateApp();
+
+    function submitOrder() {
+        const name = document.getElementById('recipe-name').innerText;
+        alert(`已下单：${name}\n调酒师正在为你准备！`);
+    }
+</script>
+
+</body>
+</html>
