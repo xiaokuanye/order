@@ -3,101 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Crossing | 数字化点单</title>
+    <title>Crossing | 数字化特调</title>
     <style>
-        /* 整体暗黑风格，符合酒吧氛围 */
         body { 
             background-color: #0a0a0a; 
             color: #ffffff; 
-            font-family: -apple-system, "Helvetica Neue", sans-serif; 
+            font-family: -apple-system, sans-serif; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
             margin: 0;
-            padding-top: 40px;
+            padding: 40px 0;
             min-height: 100vh;
         }
         
         .container { width: 85%; max-width: 400px; text-align: center; }
-        
-        h1 { 
-            color: #e6b17a; 
-            font-size: 28px; 
-            font-weight: 300; 
-            letter-spacing: 4px; 
-            margin-bottom: 10px;
-        }
-        
-        .subtitle { color: #666; font-size: 12px; margin-bottom: 40px; letter-spacing: 1px; }
+        h1 { color: #e6b17a; font-size: 28px; font-weight: 300; letter-spacing: 4px; margin-bottom: 5px; }
+        .subtitle { color: #555; font-size: 11px; margin-bottom: 35px; letter-spacing: 1px; }
 
-        /* 滑块样式 */
-        .slider-group { margin-bottom: 35px; text-align: left; }
-        label { display: block; margin-bottom: 15px; color: #aaa; font-size: 14px; }
+        /* 滑块组样式 */
+        .slider-group { margin-bottom: 30px; text-align: left; background: #111; padding: 15px; border-radius: 15px; border: 1px solid #1a1a1a; }
+        label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; color: #aaa; font-size: 13px; }
+        .icon-label { font-size: 18px; margin-right: 8px; }
         
-        input[type=range] { 
-            width: 100%; 
-            height: 4px; 
-            background: #333; 
-            border-radius: 5px; 
-            appearance: none; 
-            outline: none; 
-        }
-        
-        input[type=range]::-webkit-slider-thumb { 
-            appearance: none; 
-            width: 24px; 
-            height: 24px; 
-            background: #e6b17a; 
-            border-radius: 50%; 
-            cursor: pointer; 
-            box-shadow: 0 0 10px rgba(230, 177, 122, 0.5);
-        }
+        input[type=range] { width: 100%; height: 4px; background: #333; border-radius: 5px; appearance: none; outline: none; }
+        input[type=range]::-webkit-slider-thumb { appearance: none; width: 22px; height: 22px; background: #e6b17a; border-radius: 50%; cursor: pointer; box-shadow: 0 0 8px rgba(230, 177, 122, 0.4); }
 
-        .value-display { 
-            margin-top: 12px; 
-            color: #e6b17a; 
-            font-size: 18px; 
-            text-align: right; 
-            font-weight: bold;
-        }
+        .value-display { margin-top: 10px; color: #e6b17a; font-size: 16px; text-align: right; font-weight: 500; }
 
-        /* 下单区域 */
-        .order-section { 
-            margin-top: 40px; 
-            padding-top: 30px; 
-            border-top: 1px solid #1a1a1a; 
-        }
-        
-        #table-num { 
-            padding: 15px; 
-            border-radius: 12px; 
-            border: 1px solid #222; 
-            background: #111; 
-            color: #fff; 
-            width: 100%; 
-            margin-bottom: 20px; 
-            box-sizing: border-box; 
-            font-size: 16px; 
-            text-align: center;
-            outline: none;
-        }
-        
+        /* 下单区 */
+        .order-section { margin-top: 30px; }
+        #table-num { padding: 15px; border-radius: 12px; border: 1px solid #222; background: #111; color: #fff; width: 100%; margin-bottom: 20px; box-sizing: border-box; font-size: 16px; text-align: center; outline: none; }
         #table-num:focus { border-color: #e6b17a; }
 
-        #submit-btn { 
-            background: linear-gradient(135deg, #e6b17a, #b08e66); 
-            color: #000; 
-            border: none; 
-            padding: 18px; 
-            border-radius: 35px; 
-            width: 100%; 
-            font-weight: bold; 
-            font-size: 18px; 
-            cursor: pointer; 
-            box-shadow: 0 4px 20px rgba(230, 177, 122, 0.2);
-            transition: all 0.3s;
-        }
-        
+        #submit-btn { background: linear-gradient(135deg, #e6b17a, #b08e66); color: #000; border: none; padding: 18px; border-radius: 35px; width: 100%; font-weight: bold; font-size: 18px; cursor: pointer; box-shadow: 0 4px 20px rgba(230, 177, 122, 0.2); }
         #submit-btn:active { transform: scale(0.96); opacity: 0.8; }
     </style>
 </head>
@@ -105,69 +44,71 @@
 
 <div class="container">
     <h1>CROSSING</h1>
-    <div class="subtitle">Customized Cocktail Crafting</div>
+    <div class="subtitle">STRATEGIC COCKTAIL CRAFTING</div>
 
     <div class="slider-group">
-        <label>酸度 (ACIDITY)</label>
+        <label><span>🍋 酸度 ACIDITY</span></label>
         <input type="range" id="acid-slider" min="0" max="100" value="50">
         <div class="value-display"><span id="acid-value">50</span>%</div>
     </div>
 
     <div class="slider-group">
-        <label>甜度 (SWEETNESS)</label>
+        <label><span>🍯 甜度 SWEETNESS</span></label>
         <input type="range" id="sweet-slider" min="0" max="100" value="50">
         <div class="value-display"><span id="sweet-value">50</span>%</div>
     </div>
 
+    <div class="slider-group">
+        <label><span>🌿 苦感 BITTERNESS</span></label>
+        <input type="range" id="bitter-slider" min="0" max="100" value="0">
+        <div class="value-display"><span id="bitter-value">0</span>%</div>
+    </div>
+
+    <div class="slider-group">
+        <label><span>🥃 酒精度 STRENGTH</span></label>
+        <input type="range" id="strength-slider" min="0" max="100" value="50">
+        <div class="value-display"><span id="strength-value">50</span>%</div>
+    </div>
+
     <div class="order-section">
         <input type="text" id="table-num" placeholder="输入桌号 (如: A01)" autocomplete="off">
-        <button onclick="sendOrder()" id="submit-btn">确认发送订单</button>
+        <button onclick="sendOrder()" id="submit-btn">发送需求给调酒师</button>
     </div>
 </div>
 
 <script>
-    // 1. 滑块实时数值联动
-    const acidS = document.getElementById('acid-slider');
-    const acidV = document.getElementById('acid-value');
-    acidS.oninput = function() { acidV.innerText = this.value; }
+    // 数值动态显示逻辑
+    const sliders = ['acid', 'sweet', 'bitter', 'strength'];
+    sliders.forEach(id => {
+        const s = document.getElementById(id + '-slider');
+        const v = document.getElementById(id + '-value');
+        s.oninput = function() { v.innerText = this.value; }
+    });
 
-    const sweetS = document.getElementById('sweet-slider');
-    const sweetV = document.getElementById('sweet-value');
-    sweetS.oninput = function() { sweetV.innerText = this.value; }
-
-    // 2. 发送逻辑
     function sendOrder() {
         const table = document.getElementById('table-num').value.trim();
-        const acid = acidV.innerText;
-        const sweet = sweetV.innerText;
+        const acid = document.getElementById('acid-value').innerText;
+        const sweet = document.getElementById('sweet-value').innerText;
+        const bitter = document.getElementById('bitter-value').innerText;
+        const strength = document.getElementById('strength-value').innerText;
         const btn = document.getElementById('submit-btn');
 
-        if(!table) { 
-            alert('请填下桌号，墨霖才知道你在哪儿。'); 
-            return; 
-        }
+        if(!table) { alert('请填写桌号'); return; }
 
-        // 按钮状态更新
-        const originalText = btn.innerText;
-        btn.innerText = "正在传送订单...";
+        btn.innerText = "正在传送魔法...";
         btn.disabled = true;
 
-        // 你的 PushDeer Key
         const pushKey = "PDU40747TdeTeirMy2wQe12azBvWvUBOk9S5WjMtt"; 
         const title = encodeURIComponent(`Crossing新订单：${table}桌`);
-        const content = encodeURIComponent(`酸度 ${acid}% | 甜度 ${sweet}%`);
+        const content = encodeURIComponent(`🍋酸:${acid} | 🍯甜:${sweet} | 🌿苦:${bitter} | 🥃烈:${strength}`);
 
-        // 使用 Image 对象发送请求（黑科技，无视跨域拦截）
+        // 使用 Image 对象发送（最稳方案）
         const sender = new Image();
-        
-        // 只要请求发出，我们就视为成功
         sender.onload = sender.onerror = function() {
-            alert('订单已送达！调酒师正在准备。');
-            btn.innerText = originalText;
+            alert('口味需求已送达！');
+            btn.innerText = "发送需求给调酒师";
             btn.disabled = false;
         };
-
-        // 拼接最终请求地址并触发
         sender.src = `https://api2.pushdeer.com/message/push?pushkey=${pushKey}&text=${title}&desp=${content}&t=${new Date().getTime()}`;
     }
 </script>
