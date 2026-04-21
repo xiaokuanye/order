@@ -15,73 +15,38 @@
         .step-num { color: var(--gold); font-size: 10px; font-weight: bold; margin-bottom: 10px; display: block; opacity: 0.6; }
         .step-title { font-size: 16px; margin-bottom: 18px; color: #fff; text-align: left; }
         
-        /* 修正后的原型力量卡片样式 */
-        .god-scroll { 
-            display: flex; 
-            overflow-x: auto; 
-            gap: 12px; 
-            padding: 5px 5px 15px 5px; 
-            scrollbar-width: none; 
-            -webkit-overflow-scrolling: touch;
-        }
+        .god-scroll { display: flex; overflow-x: auto; gap: 12px; padding: 5px 5px 15px 5px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
         .god-scroll::-webkit-scrollbar { display: none; }
-        
-        .god-card { 
-            min-width: 160px; 
-            width: 160px;
-            padding: 20px 12px; 
-            background: #111; 
-            border: 1px solid #333; 
-            border-radius: 20px; 
-            text-align: center; 
-            transition: 0.4s; 
-            flex-shrink: 0; 
-            display: flex; 
-            flex-direction: column; 
-            box-sizing: border-box;
-        }
-        .god-card.active { border-color: var(--gold); background: rgba(230,177,122,0.08); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
-        
+        .god-card { min-width: 160px; width: 160px; padding: 20px 12px; background: #111; border: 1px solid #333; border-radius: 20px; text-align: center; transition: 0.4s; flex-shrink: 0; display: flex; flex-direction: column; box-sizing: border-box; }
+        .god-card.active { border-color: var(--gold); background: rgba(230,177,122,0.08); transform: translateY(-5px); }
         .god-img-wrap { width: 60px; height: 60px; border-radius: 50%; border: 1px solid #333; margin: 0 auto 12px auto; overflow: hidden; flex-shrink: 0; }
         .god-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); transition: 0.4s; }
-        .god-card.active .god-img { filter: grayscale(0%); border-color: var(--gold); }
-        
-        .god-name { font-size: 15px; font-weight: bold; color: var(--gold); margin-bottom: 4px; letter-spacing: 1px; }
-        .god-tag { font-size: 10px; color: #666; margin-bottom: 12px; height: 14px; overflow: hidden; }
-        
-        .god-desc { 
-            font-size: 11px; 
-            color: #444; 
-            line-height: 1.5; 
-            text-align: left; 
-            border-top: 1px solid #222; 
-            padding-top: 10px; 
-            transition: 0.4s;
-            display: -webkit-box;
-            -webkit-line-clamp: 4; /* 限制显示4行 */
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            min-height: 66px;
-        }
+        .god-card.active .god-img { filter: grayscale(0%); }
+        .god-name { font-size: 15px; font-weight: bold; color: var(--gold); margin-bottom: 4px; }
+        .god-tag { font-size: 10px; color: #666; margin-bottom: 12px; height: 14px; }
+        .god-desc { font-size: 11px; color: #444; line-height: 1.5; text-align: left; border-top: 1px solid #222; padding-top: 10px; min-height: 66px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
         .god-card.active .god-desc { color: #999; border-top-color: #444; }
 
-        /* 其余样式保持不变 */
         .flavor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .slider-item { margin-bottom: 15px; }
         .slider-label { display: flex; justify-content: space-between; font-size: 11px; color: #888; margin-bottom: 8px; }
         .slider-val { color: var(--gold); }
         input[type=range] { width: 100%; height: 2px; background: #333; appearance: none; outline: none; }
         input[type=range]::-webkit-slider-thumb { appearance: none; width: 18px; height: 18px; background: var(--gold); border-radius: 50%; border: 3px solid #000; }
+
         .path-group { display: flex; gap: 10px; }
         .path-btn { flex: 1; padding: 15px 5px; border: 1px solid #333; border-radius: 12px; background: #111; color: #666; font-size: 13px; cursor: pointer; }
         .path-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(230,177,122,0.1); }
+        
         .footer-action { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(10,10,10,0.95); backdrop-filter: blur(15px); padding: 20px 0; border-top: 1px solid #222; text-align: center; z-index: 100; }
         #table-num { background: #1a1a1a; border: 1px solid #333; border-radius: 10px; color: var(--gold); text-align: center; font-size: 16px; padding: 10px; width: 80px; margin-right: 10px; outline: none; }
         #submit-btn { padding: 12px 30px; border-radius: 10px; border: none; background: var(--gold); color: #000; font-size: 16px; font-weight: bold; cursor: pointer; }
+
         .task-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; max-width: 380px; background: #1a1a1a; border: 2px solid var(--gold); border-radius: 25px; padding: 35px 20px; z-index: 3000; text-align: center; box-shadow: 0 0 50px rgba(0,0,0,0.9); }
         .task-content { color: #fff; font-size: 15px; margin: 20px 0; line-height: 1.6; border-top: 1px solid #333; border-bottom: 1px solid #333; padding: 15px 0; }
         .modal-btns { display: flex; gap: 10px; }
         .modal-btns button { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; }
+
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; flex-direction: column; align-items: center; justify-content: center; }
         #poster-img { width: 85%; max-width: 350px; border-radius: 12px; }
     </style>
@@ -154,7 +119,7 @@
 
 <div class="footer-action">
     <input type="text" id="table-num" placeholder="桌号">
-    <button id="submit-btn" onclick="startRitual()">开启仪式</button>
+    <button id="submit-btn" onclick="startProcess()">开启仪式</button>
 </div>
 
 <div id="task-modal" class="task-modal">
@@ -209,27 +174,45 @@
         document.getElementById(id).classList.add('active');
     }
     function upd(el) { document.getElementById(el.id + '-v').innerText = el.value + '%'; }
-    function startRitual() {
+
+    // 核心修改：增加概率判定
+    function startProcess() {
         const table = document.getElementById('table-num').value;
         if(!table) return alert('输入桌号以固定因果');
-        currentTask = taskLibrary[Math.floor(Math.random() * taskLibrary.length)];
-        document.getElementById('task-text').innerText = `【${currentTask.title}】\n${currentTask.text}`;
-        document.getElementById('task-prize').innerText = `额外奖励：[${currentTask.prize}]`;
-        document.getElementById('task-modal').style.display = 'block';
-        document.getElementById('main-ui').style.opacity = '0.3';
+        
+        // 判定是否出现任务 (20% 几率)
+        if (Math.random() < 0.20) {
+            currentTask = taskLibrary[Math.floor(Math.random() * taskLibrary.length)];
+            document.getElementById('task-text').innerText = `【${currentTask.title}】\n${currentTask.text}`;
+            document.getElementById('task-prize').innerText = `额外奖励：[${currentTask.prize}]`;
+            document.getElementById('task-modal').style.display = 'block';
+            document.getElementById('main-ui').style.opacity = '0.3';
+        } else {
+            // 80% 几率直接执行生成
+            currentTask = null;
+            finalize(false);
+        }
     }
+
     function finalize(acceptTask) {
         const table = document.getElementById('table-num').value;
         document.getElementById('task-modal').style.display = 'none';
+        document.getElementById('main-ui').style.opacity = '1';
+        
         let resultText = "";
         let isBad = false;
         if(currentPath === 'oracle') {
-            if(Math.random() < 0.10) { isBad = true; resultText = badOracles[god][Math.floor(Math.random() * badOracles[god].length)]; }
-            else { resultText = oracles[god][Math.floor(Math.random() * oracles[god].length)]; }
+            if(Math.random() < 0.10) { 
+                isBad = true; resultText = badOracles[god][Math.floor(Math.random() * badOracles[god].length)]; 
+            } else { 
+                resultText = oracles[god][Math.floor(Math.random() * oracles[god].length)]; 
+            }
         } else { resultText = rituals[god][Math.floor(Math.random() * rituals[god].length)]; }
+        
         generatePoster(table, resultText, isBad, acceptTask);
         sendOrder(table, resultText, acceptTask);
     }
+
     function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
         let words = text.split('');
         let line = '';
@@ -243,6 +226,7 @@
         }
         ctx.fillText(line, x, y);
     }
+
     function generatePoster(table, resultText, isBad, hasTask) {
         const canvas = document.getElementById('canvas-poster');
         const ctx = canvas.getContext('2d');
@@ -287,6 +271,7 @@
         document.getElementById('poster-img').src = canvas.toDataURL('image/png');
         document.getElementById('poster-overlay').style.display = 'flex';
     }
+
     function sendOrder(table, result, hasTask) {
         const f = `酸${document.getElementById('acid').value} 甜${document.getElementById('sweet').value} 苦${document.getElementById('bitter').value} 酒${document.getElementById('abv').value}`;
         const desc = encodeURIComponent(`桌:${table}\n路径:${currentPath}\n风味:${f}\n神:${god}\n结果:${result}\n挑战:${hasTask ? currentTask.title : '无'}`);
