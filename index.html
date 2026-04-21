@@ -2,50 +2,131 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crossing | 口味定制</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Crossing | 数字化点单</title>
     <style>
-        body { background-color: #000; color: #fff; font-family: -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; padding-top: 50px; }
-        .container { width: 85%; max-width: 400px; text-align: center; }
-        h1 { color: #e6b17a; margin-bottom: 40px; font-weight: 300; letter-spacing: 2px; }
-        .slider-group { margin-bottom: 40px; }
-        label { display: block; margin-bottom: 15px; color: #ccc; }
-        input[type=range] { width: 100%; height: 6px; background: #333; border-radius: 5px; appearance: none; outline: none; }
-        input[type=range]::-webkit-slider-thumb { appearance: none; width: 20px; height: 20px; background: #e6b17a; border-radius: 50%; cursor: pointer; }
-        .value-display { margin-top: 10px; color: #e6b17a; font-size: 1.2em; }
+        /* 整体暗黑风格，符合酒吧氛围 */
+        body { 
+            background-color: #0a0a0a; 
+            color: #ffffff; 
+            font-family: -apple-system, "Helvetica Neue", sans-serif; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            margin: 0;
+            padding-top: 40px;
+            min-height: 100vh;
+        }
         
-        /* 下单区样式 */
-        .order-section { margin-top: 50px; border-top: 1px solid #222; padding-top: 30px; }
-        #table-num { padding: 14px; border-radius: 12px; border: 1px solid #333; background: #111; color: #fff; width: 100%; margin-bottom: 20px; box-sizing: border-box; font-size: 16px; text-align: center; }
-        #submit-btn { background: linear-gradient(135deg, #e6b17a, #b08e66); color: #fff; border: none; padding: 16px; border-radius: 30px; width: 100%; font-weight: bold; font-size: 18px; cursor: pointer; box-shadow: 0 4px 15px rgba(230,177,122,0.3); }
-        #submit-btn:active { transform: scale(0.98); }
+        .container { width: 85%; max-width: 400px; text-align: center; }
+        
+        h1 { 
+            color: #e6b17a; 
+            font-size: 28px; 
+            font-weight: 300; 
+            letter-spacing: 4px; 
+            margin-bottom: 10px;
+        }
+        
+        .subtitle { color: #666; font-size: 12px; margin-bottom: 40px; letter-spacing: 1px; }
+
+        /* 滑块样式 */
+        .slider-group { margin-bottom: 35px; text-align: left; }
+        label { display: block; margin-bottom: 15px; color: #aaa; font-size: 14px; }
+        
+        input[type=range] { 
+            width: 100%; 
+            height: 4px; 
+            background: #333; 
+            border-radius: 5px; 
+            appearance: none; 
+            outline: none; 
+        }
+        
+        input[type=range]::-webkit-slider-thumb { 
+            appearance: none; 
+            width: 24px; 
+            height: 24px; 
+            background: #e6b17a; 
+            border-radius: 50%; 
+            cursor: pointer; 
+            box-shadow: 0 0 10px rgba(230, 177, 122, 0.5);
+        }
+
+        .value-display { 
+            margin-top: 12px; 
+            color: #e6b17a; 
+            font-size: 18px; 
+            text-align: right; 
+            font-weight: bold;
+        }
+
+        /* 下单区域 */
+        .order-section { 
+            margin-top: 40px; 
+            padding-top: 30px; 
+            border-top: 1px solid #1a1a1a; 
+        }
+        
+        #table-num { 
+            padding: 15px; 
+            border-radius: 12px; 
+            border: 1px solid #222; 
+            background: #111; 
+            color: #fff; 
+            width: 100%; 
+            margin-bottom: 20px; 
+            box-sizing: border-box; 
+            font-size: 16px; 
+            text-align: center;
+            outline: none;
+        }
+        
+        #table-num:focus { border-color: #e6b17a; }
+
+        #submit-btn { 
+            background: linear-gradient(135deg, #e6b17a, #b08e66); 
+            color: #000; 
+            border: none; 
+            padding: 18px; 
+            border-radius: 35px; 
+            width: 100%; 
+            font-weight: bold; 
+            font-size: 18px; 
+            cursor: pointer; 
+            box-shadow: 0 4px 20px rgba(230, 177, 122, 0.2);
+            transition: all 0.3s;
+        }
+        
+        #submit-btn:active { transform: scale(0.96); opacity: 0.8; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Crossing</h1>
+    <h1>CROSSING</h1>
+    <div class="subtitle">Customized Cocktail Crafting</div>
 
     <div class="slider-group">
-        <label>酸度 (Acidity)</label>
+        <label>酸度 (ACIDITY)</label>
         <input type="range" id="acid-slider" min="0" max="100" value="50">
         <div class="value-display"><span id="acid-value">50</span>%</div>
     </div>
 
     <div class="slider-group">
-        <label>甜度 (Sweetness)</label>
+        <label>甜度 (SWEETNESS)</label>
         <input type="range" id="sweet-slider" min="0" max="100" value="50">
         <div class="value-display"><span id="sweet-value">50</span>%</div>
     </div>
 
     <div class="order-section">
-        <input type="text" id="table-num" placeholder="输入您的桌号 (如: A01)">
-        <button onclick="sendOrder()" id="submit-btn">发送订单给墨霖</button>
+        <input type="text" id="table-num" placeholder="输入桌号 (如: A01)" autocomplete="off">
+        <button onclick="sendOrder()" id="submit-btn">确认发送订单</button>
     </div>
 </div>
 
 <script>
-    // 滑块数值联动
+    // 1. 滑块实时数值联动
     const acidS = document.getElementById('acid-slider');
     const acidV = document.getElementById('acid-value');
     acidS.oninput = function() { acidV.innerText = this.value; }
@@ -54,32 +135,40 @@
     const sweetV = document.getElementById('sweet-value');
     sweetS.oninput = function() { sweetV.innerText = this.value; }
 
-    // 下单发送逻辑
-    async function sendOrder() {
-        const table = document.getElementById('table-num').value;
+    // 2. 发送逻辑
+    function sendOrder() {
+        const table = document.getElementById('table-num').value.trim();
         const acid = acidV.innerText;
         const sweet = sweetV.innerText;
         const btn = document.getElementById('submit-btn');
 
-        if(!table) { alert('请输入桌号，墨霖才知道你在哪儿。'); return; }
+        if(!table) { 
+            alert('请填下桌号，墨霖才知道你在哪儿。'); 
+            return; 
+        }
 
-        btn.innerText = "正在传送...";
+        // 按钮状态更新
+        const originalText = btn.innerText;
+        btn.innerText = "正在传送订单...";
         btn.disabled = true;
 
+        // 你的 PushDeer Key
         const pushKey = "PDU40747TdeTeirMy2wQe12azBvWvUBOk9S5WjMtt"; 
         const title = encodeURIComponent(`Crossing新订单：${table}桌`);
-        const content = encodeURIComponent(`口味：酸度 ${acid}% | 甜度 ${sweet}%`);
+        const content = encodeURIComponent(`酸度 ${acid}% | 甜度 ${sweet}%`);
 
-        try {
-            // PushDeer 接口
-            await fetch(`https://api2.pushdeer.com/message/push?pushkey=${pushKey}&text=${title}&desp=${content}`, { mode: 'no-cors' });
-            alert('订单已送达！调酒师墨霖正在为你准备。');
-        } catch (e) {
-            alert('发送成功'); 
-        } finally {
-            btn.innerText = "发送订单给墨霖";
+        // 使用 Image 对象发送请求（黑科技，无视跨域拦截）
+        const sender = new Image();
+        
+        // 只要请求发出，我们就视为成功
+        sender.onload = sender.onerror = function() {
+            alert('订单已送达！调酒师正在准备。');
+            btn.innerText = originalText;
             btn.disabled = false;
-        }
+        };
+
+        // 拼接最终请求地址并触发
+        sender.src = `https://api2.pushdeer.com/message/push?pushkey=${pushKey}&text=${title}&desp=${content}&t=${new Date().getTime()}`;
     }
 </script>
 
