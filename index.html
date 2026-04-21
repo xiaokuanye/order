@@ -5,226 +5,230 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Crossing | 战略法典</title>
     <style>
-        body { 
-            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
-            color: #ffffff; font-family: 'PingFang SC', serif; 
-            margin: 0; padding: 20px 0; display: flex; flex-direction: column; align-items: center;
-        }
-        .container { width: 90%; max-width: 450px; text-align: center; }
-        h1 { color: #e6b17a; letter-spacing: 6px; text-shadow: 0 0 15px rgba(230,177,122,0.5); margin-bottom: 5px; font-weight: 300; }
+        :root { --gold: #e6b17a; --bg: #0a0a0a; --card: #151515; }
         
-        /* 路径切换 */
-        .path-selector { display: flex; background: #111; border-radius: 25px; padding: 5px; margin: 20px 0; border: 1px solid #333; }
-        .path-btn { flex: 1; padding: 10px; border-radius: 20px; font-size: 13px; cursor: pointer; transition: 0.3s; color: #666; }
-        .path-btn.active { background: #e6b17a; color: #000; font-weight: bold; }
-
-        /* 卡片滚动 */
-        .menu-scroll { display: flex; overflow-x: auto; gap: 15px; padding: 10px 0 25px 0; scrollbar-width: none; }
-        .menu-scroll::-webkit-scrollbar { display: none; }
-        .drink-card { 
-            min-width: 180px; background: rgba(25,25,25,0.9); border: 1px solid rgba(230,177,122,0.1); 
-            border-radius: 20px; padding: 15px; cursor: pointer; transition: 0.4s; position: relative;
-        }
-        .drink-card.active { border-color: #e6b17a; box-shadow: 0 0 20px rgba(230,177,122,0.2); transform: translateY(-5px); }
-        .info-icon { 
-            position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; 
-            border: 1px solid #e6b17a; border-radius: 50%; font-size: 12px; line-height: 20px; color: #e6b17a;
+        body { 
+            background: var(--bg); color: #fff; font-family: 'serif'; 
+            margin: 0; padding: 0; display: flex; justify-content: center;
         }
 
-        .drink-name { color: #e6b17a; font-size: 16px; font-weight: bold; margin: 15px 0 5px 0; }
-        .drink-domain { font-size: 10px; background: #e6b17a; color: #000; padding: 2px 8px; border-radius: 10px; display: inline-block; }
+        .container { width: 90%; max-width: 450px; padding: 40px 0; }
 
-        /* 滑块调节 */
-        .slider-group { margin-bottom: 15px; text-align: left; background: rgba(15,15,15,0.8); padding: 12px 15px; border-radius: 12px; }
-        label { display: flex; justify-content: space-between; color: #666; font-size: 11px; margin-bottom: 8px; }
-        .val-text { color: #e6b17a; font-weight: bold; }
+        /* 引导式标题 */
+        header { text-align: center; margin-bottom: 40px; }
+        h1 { font-size: 2.5rem; letter-spacing: 8px; color: var(--gold); margin: 0; font-weight: 300; }
+        .intro-text { font-size: 12px; color: #666; margin-top: 10px; letter-spacing: 2px; line-height: 2; }
+
+        /* 步骤容器 */
+        .step-box { 
+            background: var(--card); border: 1px solid #222; border-radius: 24px;
+            padding: 25px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .step-num { color: var(--gold); font-size: 10px; font-weight: bold; margin-bottom: 15px; display: block; opacity: 0.7; }
+        .step-title { font-size: 18px; margin-bottom: 20px; color: #ddd; text-align: left; }
+
+        /* 路径选择按钮 */
+        .path-group { display: flex; gap: 10px; }
+        .path-btn { 
+            flex: 1; padding: 15px; border: 1px solid #333; border-radius: 12px; 
+            background: #111; color: #888; font-size: 13px; cursor: pointer; transition: 0.3s;
+        }
+        .path-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(230,177,122,0.05); }
+
+        /* 神灵选择卡片 */
+        .god-scroll { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 10px; scrollbar-width: none; }
+        .god-scroll::-webkit-scrollbar { display: none; }
+        .god-card { 
+            min-width: 140px; padding: 20px; background: #111; border: 1px solid #333; border-radius: 16px; 
+            text-align: center; transition: 0.4s; position: relative;
+        }
+        .god-card.active { border-color: var(--gold); background: rgba(230,177,122,0.05); transform: scale(1.05); }
+        .god-name { font-size: 15px; font-weight: bold; margin-bottom: 5px; color: var(--gold); }
+        .god-tag { font-size: 10px; color: #555; }
+        .lore-btn { font-size: 10px; color: var(--gold); margin-top: 10px; text-decoration: underline; cursor: pointer; }
+
+        /* 滑块 */
+        .slider-item { margin-bottom: 20px; }
+        .slider-label { display: flex; justify-content: space-between; font-size: 11px; color: #777; margin-bottom: 8px; }
         input[type=range] { width: 100%; height: 2px; background: #333; appearance: none; outline: none; }
-        input[type=range]::-webkit-slider-thumb { appearance: none; width: 18px; height: 18px; background: #e6b17a; border-radius: 50%; }
+        input[type=range]::-webkit-slider-thumb { appearance: none; width: 14px; height: 14px; background: var(--gold); border-radius: 50%; }
 
-        /* 通用弹窗 */
-        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 999; flex-direction: column; align-items: center; justify-content: center; }
-        .modal-box { width: 85%; max-width: 350px; padding: 30px 25px; background: #111; border: 1.5px solid #e6b17a; border-radius: 25px; text-align: center; }
-        .modal-title { color: #e6b17a; font-size: 22px; font-weight: bold; margin-bottom: 15px; letter-spacing: 2px; }
-        .modal-body { color: #ccc; font-size: 14px; line-height: 1.8; margin-bottom: 25px; text-align: justify; }
+        /* 下单区 */
+        .footer-action { text-align: center; }
+        #table-num { 
+            background: transparent; border: none; border-bottom: 1px solid #333; 
+            color: #fff; text-align: center; font-size: 18px; padding: 10px; width: 150px; margin-bottom: 25px; outline: none;
+        }
+        #submit-btn { 
+            width: 100%; padding: 20px; border-radius: 50px; border: none;
+            background: linear-gradient(135deg, #e6b17a, #b08e66); color: #000;
+            font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
 
-        #table-num { padding: 15px; border-radius: 30px; border: 1px solid #333; background: transparent; color: #fff; width: 100%; margin: 15px 0; box-sizing: border-box; text-align: center; }
-        #submit-btn { background: #e6b17a; color: #000; border: none; padding: 18px; border-radius: 40px; width: 100%; font-weight: bold; cursor: pointer; }
+        /* 弹窗样式 */
+        .overlay { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.95); z-index: 1000; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .modal { width: 80%; background: #111; border: 1px solid var(--gold); padding: 30px; border-radius: 24px; text-align: center; }
+        .modal-h { color: var(--gold); font-size: 20px; margin-bottom: 15px; }
+        .modal-p { color: #ccc; font-size: 14px; line-height: 1.8; margin-bottom: 25px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>CROSSING</h1>
-    <div style="color: #555; font-size: 10px; letter-spacing: 2px;">THE ARCANE INTERFACE</div>
-
-    <div class="path-selector">
-        <div class="path-btn active" id="path-oracle" onclick="setPath('oracle')">✧ 启示占卜</div>
-        <div class="path-btn" id="path-ritual" onclick="setPath('ritual')">❂ 仪式引导</div>
-    </div>
-
-    <div class="menu-scroll" id="menu">
-        <div class="drink-card active" id="card-hekate" onclick="selectDrink('Hekate', 80, 20, 60, 70)">
-            <div class="info-icon" onclick="showLore('Hekate'); event.stopPropagation();">?</div>
-            <div class="drink-domain">守护 · 指引</div>
-            <div class="drink-name">HEKATE</div>
+    <header>
+        <h1>CROSSING</h1>
+        <div class="intro-text">
+            欢迎来到交界地。<br>
+            请在这里通过神祇的契约，调配你的意图。
         </div>
-        <div class="drink-card" id="card-cyprian" onclick="selectDrink('St. Cyprian', 40, 40, 70, 80)">
-            <div class="info-icon" onclick="showLore('St. Cyprian'); event.stopPropagation();">?</div>
-            <div class="drink-domain">金钱 · 权能</div>
-            <div class="drink-name">ST. CYPRIAN</div>
-        </div>
-        <div class="drink-card" id="card-aphrodite" onclick="selectDrink('Aphrodite', 30, 85, 10, 40)">
-            <div class="info-icon" onclick="showLore('Aphrodite'); event.stopPropagation();">?</div>
-            <div class="drink-domain">爱情 · 魅力</div>
-            <div class="drink-name">APHRODITE</div>
+    </header>
+
+    <div class="step-box">
+        <span class="step-num">STEP 01. INTENT / 意图</span>
+        <div class="step-title">你今日为何而来？</div>
+        <div class="path-group">
+            <button class="path-btn active" onclick="setPath('oracle', this)">✧ 寻求启示 (占卜)</button>
+            <button class="path-btn" onclick="setPath('ritual', this)">❂ 开启干预 (仪式)</button>
         </div>
     </div>
 
-    <div id="selected-title" style="color: #e6b17a; font-size: 13px; margin-bottom: 15px;">当前选择：HEKATE</div>
-    
-    <div class="slider-group">
-        <label><span>🍋 酸度 ACIDITY</span> <span class="val-text"><span id="acid-value">80</span>%</span></label>
-        <input type="range" id="acid-slider" min="0" max="100" value="80">
-    </div>
-    <div class="slider-group">
-        <label><span>🍯 甜度 SWEETNESS</span> <span class="val-text"><span id="sweet-value">20</span>%</span></label>
-        <input type="range" id="sweet-slider" min="0" max="100" value="20">
-    </div>
-    <div class="slider-group">
-        <label><span>🌿 苦感 BITTERNESS</span> <span class="val-text"><span id="bitter-value">60</span>%</span></label>
-        <input type="range" id="bitter-slider" min="0" max="100" value="60">
-    </div>
-    <div class="slider-group">
-        <label><span>🥃 烈度 STRENGTH</span> <span class="val-text"><span id="strength-value">70</span>%</span></label>
-        <input type="range" id="strength-slider" min="0" max="100" value="70">
+    <div class="step-box">
+        <span class="step-num">STEP 02. ARCHETYPE / 链接</span>
+        <div class="step-title">你想通过哪位神灵降临？</div>
+        <div class="god-scroll">
+            <div class="god-card active" id="card-hekate" onclick="selectGod('Hekate', 80, 20, 60, 70)">
+                <div class="god-name">HEKATE</div>
+                <div class="god-tag">守护 · 指引 · 迷茫</div>
+                <div class="lore-btn" onclick="showLore('Hekate'); event.stopPropagation();">灵知详情</div>
+            </div>
+            <div class="god-card" id="card-cyprian" onclick="selectGod('St. Cyprian', 40, 40, 70, 80)">
+                <div class="god-name">ST. CYPRIAN</div>
+                <div class="god-tag">财富 · 契约 · 事业</div>
+                <div class="lore-btn" onclick="showLore('St. Cyprian'); event.stopPropagation();">灵知详情</div>
+            </div>
+            <div class="god-card" id="card-aphrodite" onclick="selectGod('Aphrodite', 30, 85, 10, 40)">
+                <div class="god-name">APHRODITE</div>
+                <div class="god-tag">魅力 · 爱情 · 欢愉</div>
+                <div class="lore-btn" onclick="showLore('Aphrodite'); event.stopPropagation();">灵知详情</div>
+            </div>
+        </div>
     </div>
 
-    <input type="text" id="table-num" placeholder="请输入桌号">
-    <button onclick="triggerMagick()" id="submit-btn">开启仪式</button>
+    <div class="step-box">
+        <span class="step-num">STEP 03. ELEMENTS / 元素</span>
+        <div class="step-title">基于神性的风味调配：</div>
+        
+        <div class="slider-item">
+            <div class="slider-label"><span>🍋 酸度</span> <span id="acid-v">80%</span></div>
+            <input type="range" id="acid" min="0" max="100" value="80" oninput="upd(this)">
+        </div>
+        <div class="slider-item">
+            <div class="slider-label"><span>🍯 甜度</span> <span id="sweet-v">20%</span></div>
+            <input type="range" id="sweet" min="0" max="100" value="20" oninput="upd(this)">
+        </div>
+        <div class="slider-item">
+            <div class="slider-label"><span>🌿 苦感</span> <span id="bitter-v">60%</span></div>
+            <input type="range" id="bitter" min="0" max="100" value="60" oninput="upd(this)">
+        </div>
+        <div class="slider-item">
+            <div class="slider-label"><span>🥃 酒感</span> <span id="strength-v">70%</span></div>
+            <input type="range" id="strength" min="0" max="100" value="70" oninput="upd(this)">
+        </div>
+    </div>
+
+    <div class="footer-action">
+        <input type="text" id="table-num" placeholder="请输入桌号">
+        <button id="submit-btn" onclick="execute()">开启仪式</button>
+    </div>
 </div>
 
-<div id="lore-overlay" class="overlay">
-    <div class="modal-box">
-        <div id="lore-title" class="modal-title"></div>
-        <div id="lore-body" class="modal-body"></div>
-        <button onclick="closeLore()" style="background:transparent; color:#888; border:1px solid #444; padding:10px 20px; border-radius:20px; cursor:pointer;">返回法典</button>
-    </div>
-</div>
-
-<div id="res-overlay" class="overlay">
-    <div class="modal-box">
-        <div id="res-title" class="modal-title"></div>
-        <div id="res-content" class="modal-body" style="text-align: center;"></div>
-        <button onclick="closeRes()" style="background:#e6b17a; color:#000; border:none; padding:12px 25px; border-radius:20px; font-weight:bold; cursor:pointer;">确认并点单</button>
+<div id="modal-overlay" class="overlay">
+    <div class="modal">
+        <div id="m-title" class="modal-h"></div>
+        <div id="m-body" class="modal-p"></div>
+        <button onclick="closeModal()" style="background:var(--gold); border:none; padding:12px 30px; border-radius:30px; font-weight:bold;">接收指引</button>
     </div>
 </div>
 
 <script>
-    let currentDrink = "Hekate";
-    let currentPath = "oracle";
-
-    const loreLibrary = {
-        'Hekate': {
-            title: "HEKATE | 赫卡忒",
-            body: "暗月女神与三岔路口的掌灯者。在战略魔法中，她代表了『路径的开启』与『边界的保护』。当你面临重大抉择、需要驱散周遭小人或负面能量时，她是最佳的盟友。她拥有看透迷雾的视界，能指引你在复杂的局势中找到出口。"
-        },
-        'St. Cyprian': {
-            title: "ST. CYPRIAN | 圣塞浦路斯",
-            body: "魔法师与炼金术士的主保圣人。他是游走于圣徒与巫师之间的跨界者，拥有调动『物质界资源』的权能。如果你渴望事业的飞跃、金钱的流入或契约的达成，塞浦路斯将教你如何平衡灵性与现实的筹码。"
-        },
-        'Aphrodite': {
-            title: "APHRODITE | 阿弗洛狄特",
-            body: "金星女神与美之源泉。她的职权远超世俗所谓的爱情，更关乎『吸引力法则』与『魅力的外溢』。在战略语境下，她能增强个人的磁场，不仅用于情欲与联结，更能用于提升社交说服力与自我认同感。"
-        }
+    let path = 'oracle', god = 'Hekate', lastResult = '';
+    const lores = {
+        'Hekate': '赫卡忒是三岔路口的掌灯者。当你处于人生转折点或需要避邪、驱散负面能量时，她是你的引路人。',
+        'St. Cyprian': '圣塞浦路斯是魔法师的主保圣人，掌握着物质界的契约与财富流向。适合事业跃迁者。',
+        'Aphrodite': '美神阿弗洛狄特不仅仅关于爱情，更关于个人魅力的磁场增强与社交中的吸引力。'
+    };
+    const oracles = {
+        'Hekate': ['大吉: 女神为你提灯。','吉: 阴影消散中。','凶: 宜守不宜攻。'],
+        'St. Cyprian': ['大吉: 契约已成。','吉: 资源正在靠近。','凶: 警惕账目。'],
+        'Aphrodite': ['大吉: 你即是魅力本身。','吉: 联结正在萌发。','凶: 莫要沉溺。']
+    };
+    const rituals = {
+        'Hekate': '饮用前轻磕杯底三下，想象生活阻碍碎裂。',
+        'St. Cyprian': '将硬币压在杯垫下饮用，右手握杯。',
+        'Aphrodite': '沾一点杯口水气点在眉心，深呼吸三次。'
     };
 
-    const oracleLibrary = {
-        'Hekate': {'大吉':"女神为你提灯，前方迷雾尽散。", '吉':"稳步前行，隐患将自行消解。", '中吉':"钥匙已在指尖，需对齐锁芯。", '小吉':"路口繁杂，留意第一眼直觉。", '凶':"灯火闪烁，宜守不宜攻。", '大凶':"四周皆伪装，莫轻信捷径。"},
-        'St. Cyprian': {'大吉':"物质界大门已开，财富如期而至。", '吉':"资源已就绪，等待盟友出现。", '中吉':"得失有律，保持魔法师的镇定。", '小吉':"一笔小利在途，繁荣的预兆。", '凶':"契约有裂痕，警惕账目疏漏。", '大凶':"贪婪致核心受损，清理负债。"},
-        'Aphrodite': {'大吉':"今晚你即是美本身，无人能抗拒。", '吉':"情欲种子已萌发，真诚联结靠近。", '中吉':"爱如潮汐，享受当下的宁静。", '小吉':"火花已在角落亮起，那是回应。", '凶':"警惕沉溺带来的盲目与刺痛。", '大凶':"玫瑰带刺，此时宜保护核心。"}
-    };
-
-    const ritualLibrary = {
-        'Hekate': "【路径剥离仪式】：饮用前，用杯底轻磕桌面三下，想象碎裂声带走了你面前的阻碍。闭眼饮下第一口，感受凉意驱散迷茫。",
-        'St. Cyprian': "【物质增幅仪式】：将你的右手按在手机屏幕（或硬币）上，左手握杯。饮用时想象金色的光流通过脊椎注入你的钱包。",
-        'Aphrodite': "【魅力镜像仪式】：用手指沾一圈杯口的凝水点在眉心。喝下后深呼吸三次，想象你的每一次呼吸都在向外扩散金色的磁场。"
-    };
-
-    function showLore(id) {
-        document.getElementById('lore-title').innerText = loreLibrary[id].title;
-        document.getElementById('lore-body').innerText = loreLibrary[id].body;
-        document.getElementById('lore-overlay').style.display = 'flex';
-    }
-    function closeLore() { document.getElementById('lore-overlay').style.display = 'none'; }
-
-    function setPath(path) {
-        currentPath = path;
-        document.getElementById('path-oracle').classList.toggle('active', path === 'oracle');
-        document.getElementById('path-ritual').classList.toggle('active', path === 'ritual');
+    function setPath(p, el) {
+        path = p;
+        document.querySelectorAll('.path-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
     }
 
-    function selectDrink(name, a, s, b, l) {
-        currentDrink = name;
-        document.getElementById('selected-title').innerText = "当前选择：" + name;
-        document.querySelectorAll('.drink-card').forEach(c => c.classList.remove('active'));
-        document.getElementById('card-' + name.toLowerCase().replace('st. ', '')).classList.add('active');
-        const vals = [a, s, b, l];
-        ['acid','sweet','bitter','strength'].forEach((id, i) => {
-            document.getElementById(id + '-slider').value = vals[i];
-            document.getElementById(id + '-value').innerText = vals[i];
-        });
+    function selectGod(g, a, s, b, l) {
+        god = g;
+        document.querySelectorAll('.god-card').forEach(c => c.classList.remove('active'));
+        document.getElementById('card-'+g.toLowerCase().replace('st. ', '')).classList.add('active');
+        document.getElementById('acid').value = a; document.getElementById('acid-v').innerText = a+'%';
+        document.getElementById('sweet').value = s; document.getElementById('sweet-v').innerText = s+'%';
+        document.getElementById('bitter').value = b; document.getElementById('bitter-v').innerText = b+'%';
+        document.getElementById('strength').value = l; document.getElementById('strength-v').innerText = l+'%';
     }
 
-    function triggerMagick() {
-        const table = document.getElementById('table-num').value.trim();
-        if(!table) { alert('请输入桌号'); return; }
+    function upd(el) { document.getElementById(el.id+'-v').innerText = el.value+'%'; }
 
-        let title, content;
-        if (currentPath === 'oracle') {
-            const ranks = ['大吉', '吉', '中吉', '小吉', '凶', '大凶'];
-            const rand = Math.random();
-            const rank = rand < 0.1 ? '大吉' : rand < 0.3 ? '吉' : rand < 0.6 ? '中吉' : rand < 0.85 ? '小吉' : rand < 0.95 ? '凶' : '大凶';
-            title = rank;
-            content = oracleLibrary[currentDrink][rank];
-            document.getElementById('res-title').style.color = rank.includes('凶') ? '#ff4444' : '#e6b17a';
+    function showLore(g) { 
+        openModal('灵知：'+g, lores[g]); 
+    }
+
+    function openModal(t, b) {
+        document.getElementById('m-title').innerText = t;
+        document.getElementById('m-body').innerText = b;
+        document.getElementById('modal-overlay').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('modal-overlay').style.display = 'none';
+        if(window.isFinal) sendOrder();
+    }
+
+    function execute() {
+        const table = document.getElementById('table-num').value;
+        if(!table) return alert('请输入桌号');
+        
+        let res = '';
+        if(path === 'oracle') {
+            const list = oracles[god];
+            res = list[Math.floor(Math.random()*list.length)];
+            openModal('占卜结果', res);
         } else {
-            title = "仪式指令";
-            content = ritualLibrary[currentDrink];
-            document.getElementById('res-title').style.color = '#e6b17a';
+            res = rituals[god];
+            openModal('仪式指令', res);
         }
-
-        document.getElementById('res-title').innerText = title;
-        document.getElementById('res-content').innerText = content;
-        document.getElementById('res-overlay').style.display = 'flex';
-        window.lastResult = `[${title}] ${content}`;
-    }
-
-    function closeRes() {
-        document.getElementById('res-overlay').style.display = 'none';
-        sendOrder();
+        lastResult = res;
+        window.isFinal = true;
     }
 
     function sendOrder() {
-        const table = document.getElementById('table-num').value.trim();
-        const a = document.getElementById('acid-value').innerText;
-        const s = document.getElementById('sweet-value').innerText;
-        const b = document.getElementById('bitter-value').innerText;
-        const l = document.getElementById('strength-value').innerText;
-        
+        const table = document.getElementById('table-num').value;
         const pushKey = "PDU40747TdeTeirMy2wQe12azBvWvUBOk9S5WjMtt";
-        const msgTitle = encodeURIComponent(`Crossing订单：${table}桌`);
-        const msgDesc = encodeURIComponent(`路径:${currentPath}\n神灵:${currentDrink}\n比例:酸${a} 甜${s} 苦${b} 烈${l}\n结果:${window.lastResult}`);
-
-        const img = new Image();
-        img.src = `https://api2.pushdeer.com/message/push?pushkey=${pushKey}&text=${msgTitle}&desp=${msgDesc}&t=${new Date().getTime()}`;
-        alert('意志已传达。');
+        const desc = encodeURIComponent(`桌:${table}\n路:${path}\n神:${god}\n果:${lastResult}`);
+        new Image().src = `https://api2.pushdeer.com/message/push?pushkey=${pushKey}&text=Crossing订单&desp=${desc}`;
+        alert('仪式启动。');
+        window.isFinal = false;
     }
-
-    ['acid', 'sweet', 'bitter', 'strength'].forEach(id => {
-        const s = document.getElementById(id + '-slider');
-        const v = document.getElementById(id + '-value');
-        s.oninput = function() { v.innerText = this.value; }
-    });
 </script>
 </body>
 </html>
