@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Crossing | 灵感法典</title>
+    <title>Crossing | 灵感法典与神谕</title>
     <style>
         body { 
             background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
@@ -15,7 +15,7 @@
         h1 { color: #e6b17a; letter-spacing: 6px; text-shadow: 0 0 15px rgba(230,177,122,0.5); margin-bottom: 10px; font-weight: 300; }
         .subtitle { color: #555; font-size: 10px; margin-bottom: 25px; letter-spacing: 2px; }
 
-        /* 祈愿选择区 */
+        /* 祈愿引导 */
         .wish-section {
             background: rgba(230, 177, 122, 0.05);
             border: 1px dashed rgba(230, 177, 122, 0.3);
@@ -54,14 +54,20 @@
         input[type=range] { width: 100%; height: 2px; background: #333; appearance: none; outline: none; }
         input[type=range]::-webkit-slider-thumb { appearance: none; width: 16px; height: 16px; background: #e6b17a; border-radius: 50%; box-shadow: 0 0 10px #e6b17a; }
 
-        #table-num { 
-            padding: 15px; border-radius: 30px; border: 1px solid #333; background: transparent; 
-            color: #fff; width: 100%; margin: 15px 0; box-sizing: border-box; text-align: center;
+        /* 神谕弹窗样式 */
+        #oracle-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 999; flex-direction: column; align-items: center; justify-content: center;
         }
-        #submit-btn { 
-            background: linear-gradient(135deg, #e6b17a, #b08e66); color: #000; border: none; 
-            padding: 18px; border-radius: 40px; width: 100%; font-weight: bold; cursor: pointer;
+        #oracle-box {
+            width: 80%; max-width: 350px; padding: 30px; background: #111; border: 1px solid #e6b17a;
+            border-radius: 20px; text-align: center; box-shadow: 0 0 50px rgba(230, 177, 122, 0.3);
         }
+        #oracle-title { color: #e6b17a; font-size: 14px; letter-spacing: 3px; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        #oracle-content { color: #fff; font-size: 18px; line-height: 1.8; margin-bottom: 30px; font-style: italic; }
+
+        #table-num { padding: 15px; border-radius: 30px; border: 1px solid #333; background: transparent; color: #fff; width: 100%; margin: 15px 0; box-sizing: border-box; text-align: center; }
+        #submit-btn { background: linear-gradient(135deg, #e6b17a, #b08e66); color: #000; border: none; padding: 18px; border-radius: 40px; width: 100%; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -81,49 +87,62 @@
     </div>
 
     <div class="menu-scroll" id="menu">
-        <div class="drink-card" id="card-hekate" onclick="selectDrink('Hekate', 80, 20, 60, 70)">
-            <div class="drink-domain">守护 · 辟邪 · 抉择</div>
+        <div class="drink-card active" id="card-hekate" onclick="selectDrink('Hekate', 80, 20, 60, 70)">
+            <div class="drink-domain">守护 · 抉择</div>
             <div class="drink-name">HEKATE</div>
-            <div class="drink-story">三岔路口的女神。当你在人生转折点感到迷茫，或需要驱散周遭阴霾时，以此灵丹祈求她的提灯指引。</div>
+            <div class="drink-story">三岔路口的女神，赐予迷茫者提灯的勇气。</div>
         </div>
-
         <div class="drink-card" id="card-cyprian" onclick="selectDrink('St. Cyprian', 40, 40, 70, 80)">
-            <div class="drink-domain">金钱 · 权能 · 契约</div>
+            <div class="drink-domain">金钱 · 契约</div>
             <div class="drink-name">ST. CYPRIAN</div>
-            <div class="drink-story">魔法师的主保圣人。作为沟通物质与灵界的桥梁，他掌握着金钱的流动。适合渴望事业跃迁与财富丰饶的炼金者。</div>
+            <div class="drink-story">魔法师的主保圣人，掌握物质界流动的秘密。</div>
         </div>
-
         <div class="drink-card" id="card-aphrodite" onclick="selectDrink('Aphrodite', 30, 85, 10, 40)">
-            <div class="drink-domain">爱情 · 魅力 · 欢愉</div>
+            <div class="drink-domain">爱情 · 魅力</div>
             <div class="drink-name">APHRODITE</div>
-            <div class="drink-story">从海中泡沫诞生的美神。点燃内在的磁场，吸引命定的联结。高甜度与花香调是她赠予凡人的情欲蜜露。</div>
+            <div class="drink-story">海中诞生的美神，点燃吸引力与欢愉的火种。</div>
         </div>
     </div>
 
-    <div style="color: #e6b17a; font-size: 13px; margin-bottom: 15px;" id="selected-title">当前选择：自定义特调</div>
-    <div class="slider-group">
-        <label><span>🍋 酸度 ACIDITY</span> <span class="val-text"><span id="acid-value">50</span>%</span></label>
-        <input type="range" id="acid-slider" min="0" max="100" value="50">
-    </div>
-    <div class="slider-group">
-        <label><span>🍯 甜度 SWEETNESS</span> <span class="val-text"><span id="sweet-value">50</span>%</span></label>
-        <input type="range" id="sweet-slider" min="0" max="100" value="50">
-    </div>
-    <div class="slider-group">
-        <label><span>🌿 苦感 BITTERNESS</span> <span class="val-text"><span id="bitter-value">0</span>%</span></label>
-        <input type="range" id="bitter-slider" min="0" max="100" value="0">
-    </div>
-    <div class="slider-group">
-        <label><span>🥃 酒精度 STRENGTH</span> <span class="val-text"><span id="strength-value">50</span>%</span></label>
-        <input type="range" id="strength-slider" min="0" max="100" value="50">
-    </div>
+    <div style="color: #e6b17a; font-size: 13px; margin-bottom: 15px;" id="selected-title">当前链接：HEKATE</div>
+    
+    <div class="slider-group"><label><span>🍋 酸度</span> <span class="val-text"><span id="acid-value">80</span>%</span></label><input type="range" id="acid-slider" min="0" max="100" value="80"></div>
+    <div class="slider-group"><label><span>🍯 甜度</span> <span class="val-text"><span id="sweet-value">20</span>%</span></label><input type="range" id="sweet-slider" min="0" max="100" value="20"></div>
+    <div class="slider-group"><label><span>🌿 苦感</span> <span class="val-text"><span id="bitter-value">60</span>%</span></label><input type="range" id="bitter-slider" min="0" max="100" value="60"></div>
+    <div class="slider-group"><label><span>🥃 烈度</span> <span class="val-text"><span id="strength-value">70</span>%</span></label><input type="range" id="strength-slider" min="0" max="100" value="70"></div>
 
     <input type="text" id="table-num" placeholder="于何处降临 (桌号)">
-    <button onclick="sendOrder()" id="submit-btn">注入以太完成点单</button>
+    <button onclick="castOracle()" id="submit-btn">开启仪式并接收神谕</button>
+</div>
+
+<div id="oracle-overlay">
+    <div id="oracle-box">
+        <div id="oracle-title">神 谕 降 临</div>
+        <div id="oracle-content">... 正在感应以太 ...</div>
+        <button onclick="closeOracle()" style="background:#222; color:#e6b17a; border:1px solid #e6b17a; padding:10px 20px; border-radius:20px; cursor:pointer;">接收并点单</button>
+    </div>
 </div>
 
 <script>
-    let currentDrink = "自定义";
+    let currentDrink = "Hekate";
+
+    const oracles = {
+        'Hekate': [
+            "三岔路口，左边是坦途，右边是真理，你手中的灯火将照亮答案。",
+            "阴影并非敌人，而是光芒的注脚。在黑暗中站稳，你即是主宰。",
+            "钥匙已交予你手，但在开启门扉前，请先听从内心的声音。"
+        ],
+        'St. Cyprian': [
+            "金钱是流动的血液，唯有敢于定契约者，方能主导其流向。",
+            "书页中隐藏着繁荣的符文，保持慷慨，财富将以百倍归来。",
+            "权能不仅是掌控，更是平衡物质与灵界的胆识。"
+        ],
+        'Aphrodite': [
+            "魅力并非取悦，而是内在灵魂不经意间的溢出，今日你最闪耀。",
+            "情欲如潮汐，顺应它，而非抵抗它，你将抵达温柔的彼岸。",
+            "爱是最高级的魔法，当你开始自爱，世界便会爱上你。"
+        ]
+    };
 
     function applyWish() {
         const wish = document.getElementById('wish-select').value;
@@ -134,22 +153,52 @@
 
     function selectDrink(name, a, s, b, l) {
         currentDrink = name;
-        document.getElementById('selected-title').innerText = "已链接至神性： " + name;
-        
-        // 更新卡片高亮
+        document.getElementById('selected-title').innerText = "当前链接：" + name;
         document.querySelectorAll('.drink-card').forEach(c => c.classList.remove('active'));
         const activeCard = document.getElementById('card-' + name.toLowerCase().replace('st. ', ''));
         if(activeCard) activeCard.classList.add('active');
-
-        updateSlider('acid', a);
-        updateSlider('sweet', s);
-        updateSlider('bitter', b);
-        updateSlider('strength', l);
+        ['acid','sweet','bitter','strength'].forEach((id, i) => {
+            const vals = [a, s, b, l];
+            document.getElementById(id + '-slider').value = vals[i];
+            document.getElementById(id + '-value').innerText = vals[i];
+        });
     }
 
-    function updateSlider(id, val) {
-        document.getElementById(id + '-slider').value = val;
-        document.getElementById(id + '-value').innerText = val;
+    // 纯随机占卜逻辑
+    function castOracle() {
+        const table = document.getElementById('table-num').value.trim();
+        if(!table) { alert('请输入桌号'); return; }
+
+        const drinkOracles = oracles[currentDrink] || oracles['Hekate'];
+        const randomResult = drinkOracles[Math.floor(Math.random() * drinkOracles.length)];
+        
+        document.getElementById('oracle-content').innerText = randomResult;
+        document.getElementById('oracle-overlay').style.display = 'flex';
+        
+        // 保存结果以便随单发送
+        window.lastOracle = randomResult;
+    }
+
+    function closeOracle() {
+        document.getElementById('oracle-overlay').style.display = 'none';
+        sendOrder(); // 确认收到神谕后正式下单
+    }
+
+    function sendOrder() {
+        const table = document.getElementById('table-num').value.trim();
+        const a = document.getElementById('acid-value').innerText;
+        const s = document.getElementById('sweet-value').innerText;
+        const b = document.getElementById('bitter-value').innerText;
+        const l = document.getElementById('strength-value').innerText;
+        const oracle = window.lastOracle || "无神谕";
+
+        const pushKey = "PDU40747TdeTeirMy2wQe12azBvWvUBOk9S5WjMtt";
+        const title = encodeURIComponent(`Crossing神性订单：${table}桌`);
+        const desc = encodeURIComponent(`目标:${currentDrink}\n比例:酸${a} 甜${s} 苦${b} 烈${l}\n神谕:${oracle}`);
+
+        const img = new Image();
+        img.onload = img.onerror = function() { alert('仪式开启，神谕已封存。'); };
+        img.src = `https://api2.pushdeer.com/message/push?pushkey=${pushKey}&text=${title}&desp=${desc}&t=${new Date().getTime()}`;
     }
 
     ['acid', 'sweet', 'bitter', 'strength'].forEach(id => {
@@ -157,24 +206,6 @@
         const v = document.getElementById(id + '-value');
         s.oninput = function() { v.innerText = this.value; }
     });
-
-    function sendOrder() {
-        const table = document.getElementById('table-num').value.trim();
-        if(!table) { alert('请输入桌号'); return; }
-
-        const a = document.getElementById('acid-value').innerText;
-        const s = document.getElementById('sweet-value').innerText;
-        const b = document.getElementById('bitter-value').innerText;
-        const l = document.getElementById('strength-value').innerText;
-
-        const pushKey = "PDU40747TdeTeirMy2wQe12azBvWvUBOk9S5WjMtt";
-        const title = encodeURIComponent(`Crossing神性订单：${table}桌`);
-        const desc = encodeURIComponent(`目标:${currentDrink} | 酸${a} 甜${s} 苦${b} 烈${l}`);
-
-        const img = new Image();
-        img.onload = img.onerror = function() { alert('仪式已启动，请在原处等候。'); };
-        img.src = `https://api2.pushdeer.com/message/push?pushkey=${pushKey}&text=${title}&desp=${desc}&t=${new Date().getTime()}`;
-    }
 </script>
 </body>
 </html>
