@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Crossing | 灵感法典</title>
     <style>
-        /* 保持深邃的星空背景 */
         body { 
             background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
             color: #ffffff; font-family: 'PingFang SC', serif; 
@@ -13,60 +12,55 @@
         }
 
         .container { width: 90%; max-width: 450px; text-align: center; }
-        h1 { color: #e6b17a; letter-spacing: 6px; text-shadow: 0 0 15px rgba(230,177,122,0.5); margin-bottom: 20px; font-weight: 300; }
+        h1 { color: #e6b17a; letter-spacing: 6px; text-shadow: 0 0 15px rgba(230,177,122,0.5); margin-bottom: 10px; font-weight: 300; }
+        .subtitle { color: #555; font-size: 10px; margin-bottom: 25px; letter-spacing: 2px; }
 
-        /* 酒款滚动展示区 */
+        /* 祈愿选择区 */
+        .wish-section {
+            background: rgba(230, 177, 122, 0.05);
+            border: 1px dashed rgba(230, 177, 122, 0.3);
+            border-radius: 15px; padding: 15px; margin-bottom: 25px;
+        }
+        .wish-label { color: #e6b17a; font-size: 13px; margin-bottom: 10px; display: block; }
+        #wish-select {
+            background: #111; color: #fff; border: 1px solid #444; padding: 10px;
+            width: 100%; border-radius: 8px; outline: none;
+        }
+
+        /* 酒款卡片滚动 */
         .menu-scroll {
-            display: flex; overflow-x: auto; gap: 20px; padding: 10px 0 30px 0;
+            display: flex; overflow-x: auto; gap: 15px; padding: 10px 0 25px 0;
             scrollbar-width: none;
         }
         .menu-scroll::-webkit-scrollbar { display: none; }
 
-        /* 每一款酒的法典卡片 */
         .drink-card {
-            min-width: 220px; background: rgba(25,25,25,0.9);
-            border: 1px solid rgba(230,177,122,0.15); border-radius: 20px;
-            padding: 20px; cursor: pointer; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative; overflow: hidden;
+            min-width: 200px; background: rgba(25,25,25,0.9);
+            border: 1px solid rgba(230,177,122,0.1); border-radius: 20px;
+            padding: 15px; cursor: pointer; transition: 0.4s;
         }
-        .drink-card.active { 
-            border-color: #e6b17a; 
-            box-shadow: 0 0 30px rgba(230,177,122,0.2);
-            transform: scale(1.05);
-        }
+        .drink-card.active { border-color: #e6b17a; box-shadow: 0 0 20px rgba(230,177,122,0.2); transform: translateY(-5px); }
+        .drink-name { color: #e6b17a; font-size: 16px; font-weight: bold; margin: 10px 0; }
+        .drink-domain { font-size: 10px; background: #e6b17a; color: #000; padding: 2px 8px; border-radius: 10px; display: inline-block; margin-bottom: 10px; }
+        .drink-story { font-size: 11px; color: #888; line-height: 1.5; text-align: left; }
 
-        /* 装饰性法阵背景 */
-        .drink-card::before {
-            content: "✧"; position: absolute; top: 10px; right: 10px; color: #e6b17a; opacity: 0.3;
-        }
-
-        .drink-img { width: 100%; height: 140px; border-radius: 12px; object-fit: cover; margin-bottom: 15px; filter: grayscale(30%); }
-        .drink-name { color: #e6b17a; font-size: 18px; font-weight: bold; letter-spacing: 2px; }
-        .drink-story { font-size: 11px; color: #888; margin-top: 10px; line-height: 1.6; text-align: justify; height: 0; opacity: 0; overflow: hidden; transition: 0.4s; }
-        .drink-card.active .drink-story { height: auto; opacity: 1; margin-top: 15px; }
-
-        /* 滑块调节区 */
-        .slider-section { margin-top: 20px; border-top: 1px solid #222; padding-top: 25px; }
+        /* 滑块区 */
         .slider-group { 
-            margin-bottom: 20px; text-align: left; background: rgba(15, 15, 15, 0.6); 
-            padding: 15px; border-radius: 15px;
+            margin-bottom: 15px; text-align: left; background: rgba(15,15,15,0.8); 
+            padding: 12px 15px; border-radius: 12px;
         }
-        label { display: flex; justify-content: space-between; color: #666; font-size: 11px; margin-bottom: 10px; }
-        .slider-label-text { color: #aaa; }
-        
+        label { display: flex; justify-content: space-between; color: #666; font-size: 11px; margin-bottom: 8px; }
+        .val-text { color: #e6b17a; font-weight: bold; }
         input[type=range] { width: 100%; height: 2px; background: #333; appearance: none; outline: none; }
-        input[type=range]::-webkit-slider-thumb { appearance: none; width: 18px; height: 18px; background: #e6b17a; border-radius: 50%; box-shadow: 0 0 10px #e6b17a; }
-
-        .value-display { color: #e6b17a; font-weight: bold; }
+        input[type=range]::-webkit-slider-thumb { appearance: none; width: 16px; height: 16px; background: #e6b17a; border-radius: 50%; box-shadow: 0 0 10px #e6b17a; }
 
         #table-num { 
             padding: 15px; border-radius: 30px; border: 1px solid #333; background: transparent; 
-            color: #fff; width: 100%; margin: 20px 0; box-sizing: border-box; text-align: center;
+            color: #fff; width: 100%; margin: 15px 0; box-sizing: border-box; text-align: center;
         }
         #submit-btn { 
-            background: #e6b17a; color: #000; border: none; 
+            background: linear-gradient(135deg, #e6b17a, #b08e66); color: #000; border: none; 
             padding: 18px; border-radius: 40px; width: 100%; font-weight: bold; cursor: pointer;
-            letter-spacing: 2px; box-shadow: 0 5px 20px rgba(230,177,122,0.3);
         }
     </style>
 </head>
@@ -74,63 +68,79 @@
 
 <div class="container">
     <h1>CROSSING</h1>
-    <div style="color:#555; font-size:10px; letter-spacing:3px; margin-bottom:30px;">THE GRIMOIRE OF FLAVORS</div>
+    <div class="subtitle">STRATEGIC SORCERY COCKTAILS</div>
+
+    <div class="wish-section">
+        <label class="wish-label">✧ 此时此刻，你最想增强哪种力量？</label>
+        <select id="wish-select" onchange="applyWish()">
+            <option value="">-- 请选择您的祈愿 --</option>
+            <option value="protection">守护与指引 (Hekate)</option>
+            <option value="wealth">金钱与权能 (St. Cyprian)</option>
+            <option value="love">魅力与情欲 (Aphrodite)</option>
+        </select>
+    </div>
 
     <div class="menu-scroll" id="menu">
-        
-        <div class="drink-card active" onclick="selectDrink(this, 'Hekate', 80, 30, 60, 70)">
-            <img src="https://via.placeholder.com/300/1a1a1a/e6b17a?text=HEKATE" class="drink-img">
+        <div class="drink-card" id="card-hekate" onclick="selectDrink('Hekate', 80, 20, 60, 70)">
+            <div class="drink-domain">守护 · 辟邪 · 抉择</div>
             <div class="drink-name">HEKATE</div>
-            <div class="drink-story">
-                「三岔路口的掌灯者」。这款酒正如女神的化身，在迷雾般的苦感与强劲的酸度中寻找平衡。草本的芬芳是她在密林中的足迹，而强烈的酒精感则是火焰的余温。
-            </div>
-        </div>
-        
-        <div class="drink-card" onclick="selectDrink(this, '自定义调配', 50, 50, 0, 50)">
-            <img src="https://via.placeholder.com/300/1a1a1a/e6b17a?text=CUSTOM" class="drink-img">
-            <div class="drink-name">CUSTOM</div>
-            <div class="drink-story">
-                不被规则定义的虚空。在这里，你就是炼金术士，所有的元素流向都取决于你的一念之间。
-            </div>
+            <div class="drink-story">三岔路口的女神。当你在人生转折点感到迷茫，或需要驱散周遭阴霾时，以此灵丹祈求她的提灯指引。</div>
         </div>
 
+        <div class="drink-card" id="card-cyprian" onclick="selectDrink('St. Cyprian', 40, 40, 70, 80)">
+            <div class="drink-domain">金钱 · 权能 · 契约</div>
+            <div class="drink-name">ST. CYPRIAN</div>
+            <div class="drink-story">魔法师的主保圣人。作为沟通物质与灵界的桥梁，他掌握着金钱的流动。适合渴望事业跃迁与财富丰饶的炼金者。</div>
+        </div>
+
+        <div class="drink-card" id="card-aphrodite" onclick="selectDrink('Aphrodite', 30, 85, 10, 40)">
+            <div class="drink-domain">爱情 · 魅力 · 欢愉</div>
+            <div class="drink-name">APHRODITE</div>
+            <div class="drink-story">从海中泡沫诞生的美神。点燃内在的磁场，吸引命定的联结。高甜度与花香调是她赠予凡人的情欲蜜露。</div>
+        </div>
     </div>
 
-    <div class="slider-section">
-        <div style="color: #e6b17a; font-size: 13px; margin-bottom: 20px;" id="selected-title">当前指引：HEKATE</div>
-
-        <div class="slider-group">
-            <label><span class="slider-label-text">🍋 酸度 ACIDITY</span> <span class="value-display"><span id="acid-value">80</span>%</span></label>
-            <input type="range" id="acid-slider" min="0" max="100" value="80">
-        </div>
-        <div class="slider-group">
-            <label><span class="slider-label-text">🍯 甜度 SWEETNESS</span> <span class="value-display"><span id="sweet-value">30</span>%</span></label>
-            <input type="range" id="sweet-slider" min="0" max="100" value="30">
-        </div>
-        <div class="slider-group">
-            <label><span class="slider-label-text">🌿 苦感 BITTERNESS</span> <span class="value-display"><span id="bitter-value">60</span>%</span></label>
-            <input type="range" id="bitter-slider" min="0" max="100" value="60">
-        </div>
-        <div class="slider-group">
-            <label><span class="slider-label-text">🥃 酒精度 STRENGTH</span> <span class="value-display"><span id="strength-value">70</span>%</span></label>
-            <input type="range" id="strength-slider" min="0" max="100" value="70">
-        </div>
-
-        <input type="text" id="table-num" placeholder="于何处降临 (桌号)">
-        <button onclick="sendOrder()" id="submit-btn">开启仪式</button>
+    <div style="color: #e6b17a; font-size: 13px; margin-bottom: 15px;" id="selected-title">当前选择：自定义特调</div>
+    <div class="slider-group">
+        <label><span>🍋 酸度 ACIDITY</span> <span class="val-text"><span id="acid-value">50</span>%</span></label>
+        <input type="range" id="acid-slider" min="0" max="100" value="50">
     </div>
+    <div class="slider-group">
+        <label><span>🍯 甜度 SWEETNESS</span> <span class="val-text"><span id="sweet-value">50</span>%</span></label>
+        <input type="range" id="sweet-slider" min="0" max="100" value="50">
+    </div>
+    <div class="slider-group">
+        <label><span>🌿 苦感 BITTERNESS</span> <span class="val-text"><span id="bitter-value">0</span>%</span></label>
+        <input type="range" id="bitter-slider" min="0" max="100" value="0">
+    </div>
+    <div class="slider-group">
+        <label><span>🥃 酒精度 STRENGTH</span> <span class="val-text"><span id="strength-value">50</span>%</span></label>
+        <input type="range" id="strength-slider" min="0" max="100" value="50">
+    </div>
+
+    <input type="text" id="table-num" placeholder="于何处降临 (桌号)">
+    <button onclick="sendOrder()" id="submit-btn">注入以太完成点单</button>
 </div>
 
 <script>
-    let currentDrink = "Hekate";
+    let currentDrink = "自定义";
 
-    function selectDrink(element, name, a, s, b, l) {
-        document.querySelectorAll('.drink-card').forEach(c => c.classList.remove('active'));
-        element.classList.add('active');
-        
+    function applyWish() {
+        const wish = document.getElementById('wish-select').value;
+        if(wish === 'protection') selectDrink('Hekate', 80, 20, 60, 70);
+        if(wish === 'wealth') selectDrink('St. Cyprian', 40, 40, 70, 80);
+        if(wish === 'love') selectDrink('Aphrodite', 30, 85, 10, 40);
+    }
+
+    function selectDrink(name, a, s, b, l) {
         currentDrink = name;
-        document.getElementById('selected-title').innerText = "当前指引：" + name.toUpperCase();
+        document.getElementById('selected-title').innerText = "已链接至神性： " + name;
         
+        // 更新卡片高亮
+        document.querySelectorAll('.drink-card').forEach(c => c.classList.remove('active'));
+        const activeCard = document.getElementById('card-' + name.toLowerCase().replace('st. ', ''));
+        if(activeCard) activeCard.classList.add('active');
+
         updateSlider('acid', a);
         updateSlider('sweet', s);
         updateSlider('bitter', b);
@@ -138,10 +148,8 @@
     }
 
     function updateSlider(id, val) {
-        const s = document.getElementById(id + '-slider');
-        const v = document.getElementById(id + '-value');
-        s.value = val;
-        v.innerText = val;
+        document.getElementById(id + '-slider').value = val;
+        document.getElementById(id + '-value').innerText = val;
     }
 
     ['acid', 'sweet', 'bitter', 'strength'].forEach(id => {
@@ -152,7 +160,7 @@
 
     function sendOrder() {
         const table = document.getElementById('table-num').value.trim();
-        if(!table) { alert('请指定方位（桌号）'); return; }
+        if(!table) { alert('请输入桌号'); return; }
 
         const a = document.getElementById('acid-value').innerText;
         const s = document.getElementById('sweet-value').innerText;
@@ -160,11 +168,11 @@
         const l = document.getElementById('strength-value').innerText;
 
         const pushKey = "PDU40747TdeTeirMy2wQe12azBvWvUBOk9S5WjMtt";
-        const title = encodeURIComponent(`仪式开启：${table}桌 [${currentDrink}]`);
-        const desc = encodeURIComponent(`元素比例：酸${a} 甜${s} 苦${b} 烈${l}`);
+        const title = encodeURIComponent(`Crossing神性订单：${table}桌`);
+        const desc = encodeURIComponent(`目标:${currentDrink} | 酸${a} 甜${s} 苦${b} 烈${l}`);
 
         const img = new Image();
-        img.onload = img.onerror = function() { alert('仪式已向调酒师传达。'); };
+        img.onload = img.onerror = function() { alert('仪式已启动，请在原处等候。'); };
         img.src = `https://api2.pushdeer.com/message/push?pushkey=${pushKey}&text=${title}&desp=${desc}&t=${new Date().getTime()}`;
     }
 </script>
