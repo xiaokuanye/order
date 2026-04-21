@@ -5,24 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Crossing | 战略法典</title>
     <style>
-        :root { --gold: #e6b17a; --bg: #0a0a0a; --card: #1a1a1a; --text: #ddd; }
+        :root { --gold: #e6b17a; --bg: #0a0a0a; --card: #1a1a1a; --text: #ddd; --accent: #e6b17a; }
+        /* 深夜里模式样式 */
+        body.midnight-mode { --bg: #1a0505; --card: #2d0a0a; --gold: #999; --accent: #ff4444; }
         
         body { 
             background: var(--bg); color: var(--text); font-family: -apple-system, "Noto Sans SC", serif; 
-            margin: 0; padding: 0; overflow-x: hidden;
+            margin: 0; padding: 0; transition: background 2s;
         }
 
         .container { width: 92%; max-width: 500px; margin: 0 auto; padding: 40px 0 120px 0; }
-
         header { text-align: center; margin-bottom: 40px; }
-        h1 { font-size: 2.8rem; letter-spacing: 10px; color: var(--gold); margin: 0; font-weight: 300; }
+        h1 { font-size: 2.8rem; letter-spacing: 10px; color: var(--accent); margin: 0; font-weight: 300; }
         .intro-text { font-size: 14px; color: #666; margin-top: 15px; letter-spacing: 2px; }
 
         .step-box { 
             background: var(--card); border: 1px solid #2a2a2a; border-radius: 28px;
             padding: 30px 20px; margin-bottom: 25px; box-sizing: border-box;
         }
-        .step-num { color: var(--gold); font-size: 11px; font-weight: bold; margin-bottom: 12px; display: block; opacity: 0.6; }
+        .step-num { color: var(--accent); font-size: 11px; font-weight: bold; margin-bottom: 12px; display: block; opacity: 0.6; }
         .step-title { font-size: 18px; margin-bottom: 20px; color: #fff; text-align: left; }
 
         .path-group { display: flex; gap: 12px; }
@@ -30,72 +31,48 @@
             flex: 1; padding: 18px 5px; border: 1px solid #333; border-radius: 16px; 
             background: #111; color: #777; font-size: 14px; cursor: pointer; transition: 0.3s;
         }
-        .path-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(230,177,122,0.1); }
+        .path-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(255,68,68,0.1); }
 
         .god-scroll { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 15px; scrollbar-width: none; }
-        .god-scroll::-webkit-scrollbar { display: none; }
         .god-card { 
             min-width: 160px; padding: 20px 10px; background: #111; border: 1px solid #333; border-radius: 20px; 
             text-align: center; transition: 0.4s; flex-shrink: 0; position: relative;
         }
-        .god-card.active { border-color: var(--gold); background: rgba(230,177,122,0.08); transform: translateY(-5px); }
-        
+        .god-card.active { border-color: var(--accent); background: rgba(255,68,68,0.08); transform: translateY(-5px); }
         .god-img-wrap { width: 70px; height: 70px; border-radius: 50%; border: 2px solid #333; margin: 0 auto 15px auto; overflow: hidden; }
-        .god-card.active .god-img-wrap { border-color: var(--gold); box-shadow: 0 0 15px rgba(230,177,122,0.3); }
-        .god-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); transition: 0.4s; }
-        .god-card.active .god-img { filter: grayscale(0%); }
-
-        .god-name { font-size: 17px; font-weight: bold; margin-bottom: 8px; color: var(--gold); }
+        .god-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); }
+        .god-name { font-size: 17px; font-weight: bold; margin-bottom: 8px; color: var(--accent); }
         .god-tag { font-size: 11px; color: #555; }
-        .lore-btn { font-size: 11px; color: var(--gold); margin-top: 10px; text-decoration: underline; cursor: pointer; display: block; opacity: 0.7; }
 
-        .slider-item { margin-bottom: 25px; }
-        .slider-label { display: flex; justify-content: space-between; font-size: 13px; color: #888; margin-bottom: 10px; }
-        .slider-val { color: var(--gold); font-weight: bold; }
         input[type=range] { width: 100%; height: 3px; background: #333; appearance: none; outline: none; }
-        input[type=range]::-webkit-slider-thumb { appearance: none; width: 22px; height: 22px; background: var(--gold); border-radius: 50%; border: 4px solid #000; }
+        input[type=range]::-webkit-slider-thumb { appearance: none; width: 22px; height: 22px; background: var(--accent); border-radius: 50%; border: 4px solid #000; }
 
         .footer-action { 
             position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(10,10,10,0.9);
             backdrop-filter: blur(15px); padding: 20px 0; border-top: 1px solid #222; text-align: center; z-index: 100;
         }
-        #table-num { 
-            background: #1a1a1a; border: 1px solid #333; border-radius: 12px;
-            color: var(--gold); text-align: center; font-size: 18px; padding: 12px; width: 100px; margin-right: 10px; outline: none;
-        }
-        #submit-btn { 
-            padding: 15px 35px; border-radius: 12px; border: none;
-            background: var(--gold); color: #000; font-size: 17px; font-weight: bold; cursor: pointer;
-        }
+        #table-num { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; color: var(--accent); text-align: center; font-size: 18px; padding: 12px; width: 100px; margin-right: 10px; }
+        #submit-btn { padding: 15px 35px; border-radius: 12px; border: none; background: var(--accent); color: #000; font-size: 17px; font-weight: bold; cursor: pointer; }
 
-        .overlay { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.95); z-index: 2000; flex-direction: column; align-items: center; justify-content: center;
-        }
-        .poster-container { width: 85%; max-width: 350px; position: relative; }
-        #canvas-poster { width: 100%; border-radius: 15px; display: none; }
-        #poster-img { width: 100%; border-radius: 15px; box-shadow: 0 0 30px rgba(230,177,122,0.2); }
-        .poster-hint { color: var(--gold); font-size: 13px; margin-top: 20px; letter-spacing: 1px; }
-
-        .modal { width: 85%; max-height: 80vh; overflow-y: auto; background: #151515; border: 1px solid var(--gold); padding: 35px 25px; border-radius: 30px; text-align: center; }
-        .modal-h { color: var(--gold); font-size: 22px; margin-bottom: 20px; letter-spacing: 2px; }
-        .modal-p { color: #bbb; font-size: 15px; line-height: 1.8; margin-bottom: 30px; text-align: justify; }
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; flex-direction: column; align-items: center; justify-content: center; }
+        .poster-container { width: 85%; max-width: 350px; }
+        #poster-img { width: 100%; border-radius: 15px; box-shadow: 0 0 30px rgba(255,68,68,0.2); }
     </style>
 </head>
-<body>
+<body id="body-tag">
 
 <div class="container">
     <header>
-        <h1>CROSSING</h1>
-        <div class="intro-text">意志即配方 · 调配你的战略契约</div>
+        <h1 id="main-title">CROSSING</h1>
+        <div id="sub-title" class="intro-text">意志即配方 · 调配你的战略契约</div>
     </header>
 
     <div class="step-box">
         <span class="step-num">STEP 01. PATH</span>
         <div class="step-title">请设定今日意图：</div>
         <div class="path-group">
-            <button class="path-btn active" onclick="setPath('oracle', this)">✧ 寻求神谕</button>
-            <button class="path-btn" onclick="setPath('ritual', this)">❂ 开启仪式</button>
+            <button class="path-btn active" id="btn-oracle" onclick="setPath('oracle', this)">✧ 寻求神谕</button>
+            <button class="path-btn" id="btn-ritual" onclick="setPath('ritual', this)">❂ 开启仪式</button>
         </div>
     </div>
 
@@ -103,46 +80,34 @@
         <span class="step-num">STEP 02. LINKAGE</span>
         <div class="step-title">选择对应的原型力量：</div>
         <div class="god-scroll">
-            <div class="god-card active" id="card-hekate" onclick="selectGod('Hekate', 80, 20, 60, 70)">
-                <div class="god-img-wrap"><img src="hekate.jpg" class="god-img" alt="Hekate"></div>
-                <div class="god-name">HEKATE</div>
-                <div class="god-tag">守护 / 路径 / 驱邪</div>
-                <span class="lore-btn" onclick="showLore('Hekate'); event.stopPropagation();">查看灵知</span>
+            <div class="god-card active" id="card-hekate" onclick="selectGod('Hekate')">
+                <div class="god-img-wrap"><img src="hekate.jpg" class="god-img"></div>
+                <div class="god-name" id="name-hekate">HEKATE</div>
+                <div class="god-tag" id="tag-hekate">守护 / 路径 / 驱邪</div>
             </div>
-            <div class="god-card" id="card-cyprian" onclick="selectGod('St. Cyprian', 40, 40, 70, 80)">
-                <div class="god-img-wrap"><img src="cyprian.jpg" class="god-img" alt="St. Cyprian"></div>
-                <div class="god-name">ST. CYPRIAN</div>
-                <div class="god-tag">财富 / 契约 / 事业</div>
-                <span class="lore-btn" onclick="showLore('St. Cyprian'); event.stopPropagation();">查看灵知</span>
+            <div class="god-card" id="card-cyprian" onclick="selectGod('St. Cyprian')">
+                <div class="god-img-wrap"><img src="cyprian.jpg" class="god-img"></div>
+                <div class="god-name" id="name-cyprian">ST. CYPRIAN</div>
+                <div class="god-tag" id="tag-cyprian">财富 / 契约 / 事业</div>
             </div>
-            <div class="god-card" id="card-aphrodite" onclick="selectGod('Aphrodite', 30, 85, 10, 40)">
-                <div class="god-img-wrap"><img src="aphrodite.jpg" class="god-img" alt="Aphrodite"></div>
-                <div class="god-name">APHRODITE</div>
-                <div class="god-tag">魅力 / 爱情 / 联结</div>
-                <span class="lore-btn" onclick="showLore('Aphrodite'); event.stopPropagation();">查看灵知</span>
+            <div class="god-card" id="card-aphrodite" onclick="selectGod('Aphrodite')">
+                <div class="god-img-wrap"><img src="aphrodite.jpg" class="god-img"></div>
+                <div class="god-name" id="name-aphrodite">APHRODITE</div>
+                <div class="god-tag" id="tag-aphrodite">魅力 / 爱情 / 联结</div>
             </div>
         </div>
     </div>
 
     <div class="step-box">
         <span class="step-num">STEP 03. ELEMENTS</span>
-        <div class="step-title">调整风味炼金比例：</div>
+        <div class="step-title">调整风味比例：</div>
         <div class="slider-item">
-            <div class="slider-label"><span>🍋 酸度 ACIDITY</span> <span class="slider-val" id="acid-v">80%</span></div>
-            <input type="range" id="acid" min="0" max="100" value="80" oninput="upd(this)">
+            <input type="range" id="acid" min="0" max="100" value="50" oninput="upd(this)">
         </div>
         <div class="slider-item">
-            <div class="slider-label"><span>🍯 甜度 SWEETNESS</span> <span class="slider-val" id="sweet-v">20%</span></div>
-            <input type="range" id="sweet" min="0" max="100" value="20" oninput="upd(this)">
+            <input type="range" id="strength" min="0" max="100" value="50" oninput="upd(this)">
         </div>
-        <div class="slider-item">
-            <div class="slider-label"><span>🌿 苦感 BITTERNESS</span> <span class="slider-val" id="bitter-v">60%</span></div>
-            <input type="range" id="bitter" min="0" max="100" value="60" oninput="upd(this)">
-        </div>
-        <div class="slider-item">
-            <div class="slider-label"><span>🥃 酒感 STRENGTH</span> <span class="slider-val" id="strength-v">70%</span></div>
-            <input type="range" id="strength" min="0" max="100" value="70" oninput="upd(this)">
-        </div>
+        <p style="font-size: 10px; color: #444; text-align: center;">深夜模式下比例将产生不可控偏移</p>
     </div>
 </div>
 
@@ -151,75 +116,46 @@
     <button id="submit-btn" onclick="execute()">开启仪式</button>
 </div>
 
-<div id="modal-overlay" class="overlay">
-    <div class="modal">
-        <div id="m-title" class="modal-h"></div>
-        <div id="m-body" class="modal-p"></div>
-        <button onclick="closeModal()" style="background:var(--gold); border:none; padding:15px 40px; border-radius:15px; font-weight:bold; font-size:16px; cursor:pointer;">接收</button>
-    </div>
-</div>
-
 <div id="poster-overlay" class="overlay">
     <div class="poster-container">
-        <canvas id="canvas-poster" width="600" height="900"></canvas>
-        <img id="poster-img" src="" alt="点单契约">
-        <div class="poster-hint">—— 长按保存契约，公证于朋友圈 ——</div>
-        <button onclick="location.reload()" style="margin-top:20px; background:transparent; border:1px solid #444; color:#888; padding:8px 20px; border-radius:20px; cursor:pointer;">返回法典</button>
+        <canvas id="canvas-poster" width="600" height="900" style="display:none;"></canvas>
+        <img id="poster-img" src="">
+        <button onclick="location.reload()" style="margin-top:20px; background:transparent; border:1px solid #444; color:#888; padding:8px 20px; border-radius:20px; cursor:pointer;">离开里世界</button>
     </div>
 </div>
 
 <script>
-    let path = 'oracle', god = 'Hekate', lastResult = '';
+    let path = 'oracle', god = 'Hekate', isMidnight = false;
 
-    const lores = {
-        'Hekate': '【暗月女神与路径开启者】\n赫卡忒是掌管三岔路口、巫术与幽灵的古老女神。在战略魔法中，她不仅代表了对边界的控制，更是“路径开启”的核心力量。当你身处迷茫、遭遇小人阻碍，或需要保护自己的隐私与资产时，她的灯火能照亮最稳妥的出口。',
-        'St. Cyprian': '【魔法师主保与物质权能者】\n圣塞浦路斯曾是安提阿最强大的黑巫师，后转向神圣之路。他拥有调动灵界资源处理世俗事务的独特特许权。在职业发展、金钱协议、法律纠纷或需要增强个人“特权”的语境下，他是连接精神与物质世界的最佳桥梁。',
-        'Aphrodite': '【金星之主与引力操纵者】\n阿弗洛狄特的职权远超世俗的情爱。她掌管着“吸引力”的本质——这包括社交说服力、个人磁场、艺术灵感以及资源向你自动靠拢的趋势。当你需要提升谈判成功率、建立深度人脉或增强自我认同感时，她的玫瑰便是你的盾牌。'
+    // 检查是否进入深夜模式 (0:00 - 5:00)
+    function checkTime() {
+        const hour = new Date().getHours();
+        if (hour >= 0 && hour < 5) {
+            isMidnight = true;
+            document.getElementById('body-tag').classList.add('midnight-mode');
+            document.getElementById('main-title').innerText = "ABYSS CROSSING";
+            document.getElementById('sub-title').innerText = "禁忌法典：这里没有生者的出口";
+            
+            // 异化神名
+            document.getElementById('name-hekate').innerText = "BRIMO";
+            document.getElementById('tag-hekate').innerText = "愤怒 / 恐惧 / 墓地";
+            document.getElementById('name-cyprian').innerText = "SORCERER CYPRIAN";
+            document.getElementById('tag-cyprian').innerText = "黑巫术 / 债权 / 交易";
+            document.getElementById('name-aphrodite').innerText = "PANDEMOS";
+            document.getElementById('tag-aphrodite').innerText = "肉欲 / 疯狂 / 占有";
+        }
+    }
+
+    const standardOracles = {
+        'Hekate': ['女神为你提灯，捷径已现。','听从直觉的选择。'],
+        'St. Cyprian': ['金钱契约已成。','资源正在汇聚。'],
+        'Aphrodite': ['你即是魅力源泉。','联结正在萌发。']
     };
 
-    const oracleLibrary = {
-        'Hekate': [
-            '大吉：女神为你提灯，前方不仅没有伏兵，还有捷径。',
-            '吉：阴影正在消散，保持低调即可穿过瓶颈。',
-            '中吉：在十字路口稍作停留，听从第一个直觉。',
-            '小吉：钥匙已在手中，但仍需对齐正确的锁芯。',
-            '凶：路口风大，此时宜守不宜攻，莫轻信他人。',
-            '大凶：提灯闪烁，有人在迷雾中设伏，速回防。'
-        ],
-        'St. Cyprian': [
-            '大吉：物质界大门敞开，契约将以意想不到的方式达成。',
-            '吉：资源正在加速汇聚，留意来自年长男性的建议。',
-            '中吉：保持理智的平衡，投入与产出将成正比。',
-            '小吉：一笔小的流动性正在靠近，繁荣的预兆。',
-            '凶：契约内容有瑕疵，警惕隐藏的债务或条款。',
-            '大凶：贪婪遮蔽了双眼，此时极易出现核心资产受损。'
-        ],
-        'Aphrodite': [
-            '大吉：磁场达到峰值，今晚你即是吸引力的中心。',
-            '吉：联结正在萌发，真诚的协作将带来丰厚回报。',
-            '中吉：爱如潮汐，不必强求，顺应流动自然如愿。',
-            '小吉：魅力正在外溢，适合表达你的真实意图。',
-            '凶：莫要被幻象沉溺，警惕浮华背后的空洞。',
-            '大凶：玫瑰带刺，盲目的沉溺可能导致严重的失衡。'
-        ]
-    };
-
-    const ritualLibrary = {
-        'Hekate': [
-            '【路径剥离仪式】：饮用前请用酒杯底座轻敲桌面三下，闭眼想象面前的阻碍如玻璃般碎裂。',
-            '【提灯引导仪式】：注视杯中的冰块，深呼吸三次，想象光亮从杯中升起照亮你的双眼。',
-            '【边界守护仪式】：沾取一滴酒液点在左手心，握拳，象征你的意志与隐私已被密封保护。'
-        ],
-        'St. Cyprian': [
-            '【特权增幅仪式】：请找一枚硬币压在杯垫下，饮用时右手握杯，感受财富的重量注入身体。',
-            '【契约公证仪式】：在心中默念一个具体的数字或目标，饮用第一口后，用杯底压住小票。',
-            '【资源锚定仪式】：将手机背部贴紧杯壁感受冷冽，想象数字世界的资源正被你锚定。'
-        ],
-        'Aphrodite': [
-            '【魅力镜像仪式】：用手指沾一圈杯口的冷凝水点在耳后，在心中默念你想要吸引的状态。',
-            '【引力对齐仪式】：举杯齐眉，注视杯中色彩，想象你的气场正在向外扩散出柔和的金光。',
-            '【联结修复仪式】：饮用前，请将酒杯顺时针旋转三圈，想象破损的关系正在被液态能量修复。'
-        ]
+    const midnightOracles = {
+        'Hekate': ['别回头，影子里的东西已经跟上你了。','钥匙碎了，今晚你哪也别想去。','她在坟场看着你，你在看谁？'],
+        'St. Cyprian': ['这笔债，你打算用什么来偿还？','你的灵魂在契约书上微微发烫。','交易达成，但你丢失了一段记忆。'],
+        'Aphrodite': ['你以为那是爱？那是啃食你的寄生。','她苍白的指甲正划过你的后颈。','沉溺吧，直到你忘记自己的名字。']
     };
 
     function setPath(p, el) {
@@ -228,99 +164,69 @@
         el.classList.add('active');
     }
 
-    function selectGod(g, a, s, b, l) {
+    function selectGod(g) {
         god = g;
         document.querySelectorAll('.god-card').forEach(c => c.classList.remove('active'));
-        const selector = g === 'St. Cyprian' ? 'cyprian' : g.toLowerCase();
-        document.getElementById('card-'+selector).classList.add('active');
-        const ids = ['acid','sweet','bitter','strength'];
-        const vals = [a,s,b,l];
-        ids.forEach((id, i) => {
-            document.getElementById(id).value = vals[i];
-            document.getElementById(id+'-v').innerText = vals[i]+'%';
-        });
+        const id = g === 'St. Cyprian' ? 'card-cyprian' : 'card-' + g.toLowerCase();
+        document.getElementById(id).classList.add('active');
     }
 
-    function upd(el) { document.getElementById(el.id+'-v').innerText = el.value+'%'; }
-    function showLore(g) { 
-        document.getElementById('m-title').innerText = '灵知：' + g;
-        document.getElementById('m-body').innerText = lores[g];
-        document.getElementById('modal-overlay').style.display = 'flex';
-        window.isFinal = false;
-    }
-    function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
+    function upd(el) {} // 简化版
 
     function execute() {
         const table = document.getElementById('table-num').value;
-        if(!table) return alert('请先输入桌号');
+        if(!table) return alert('输入桌号以固定因果');
         
-        const list = path === 'oracle' ? oracleLibrary[god] : ritualLibrary[god];
-        lastResult = list[Math.floor(Math.random()*list.length)];
+        const list = isMidnight ? midnightOracles[god] : standardOracles[god];
+        const result = list[Math.floor(Math.random()*list.length)];
         
-        generatePoster(table, path === 'oracle' ? 'Seeker of Oracle' : 'Act of Ritual');
-        sendOrder(table);
+        generatePoster(table, result);
     }
 
-    // 智能换行函数
-    function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
-        let words = text.split('');
-        let line = '';
-        for(let n = 0; n < words.length; n++) {
-            let testLine = line + words[n];
-            let metrics = ctx.measureText(testLine);
-            if (metrics.width > maxWidth && n > 0) {
-                ctx.fillText(line, x, y);
-                line = words[n];
-                y += lineHeight;
-            } else {
-                line = testLine;
-            }
-        }
-        ctx.fillText(line, x, y);
-    }
-
-    function generatePoster(table, typeTitle) {
+    function generatePoster(table, result) {
         const canvas = document.getElementById('canvas-poster');
         const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#0a0a0a';
+        const themeColor = isMidnight ? '#ff4444' : '#e6b17a';
+        const bgColor = isMidnight ? '#1a0505' : '#0a0a0a';
+
+        ctx.fillStyle = bgColor;
         ctx.fillRect(0, 0, 600, 900);
-        ctx.strokeStyle = '#e6b17a';
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = themeColor;
+        ctx.lineWidth = 4;
         ctx.strokeRect(30, 30, 540, 840);
-        ctx.strokeRect(40, 40, 520, 820);
-        ctx.fillStyle = '#e6b17a';
+
+        ctx.fillStyle = themeColor;
         ctx.textAlign = 'center';
         ctx.font = '30px serif';
-        ctx.fillText('CROSSING BAR', 300, 120);
-        ctx.font = 'italic 20px serif';
-        ctx.fillText('Strategic Magick Pact', 300, 160);
-        ctx.strokeStyle = 'rgba(230,177,122,0.3)';
-        ctx.beginPath(); ctx.moveTo(150, 200); ctx.lineTo(450, 200); ctx.stroke();
-        ctx.font = 'bold 50px serif';
-        ctx.fillText(god.toUpperCase(), 300, 310);
+        ctx.fillText(isMidnight ? 'ABYSS CROSSING' : 'CROSSING BAR', 300, 120);
+        
+        ctx.font = 'bold 55px serif';
+        const displayGod = isMidnight ? (god==='Hekate'?'BRIMO':god==='St. Cyprian'?'SORCERER':'PANDEMOS') : god.toUpperCase();
+        ctx.fillText(displayGod, 300, 320);
+
         ctx.font = '24px sans-serif';
         ctx.fillStyle = '#888';
-        ctx.fillText(`TABLE ${table} / ${typeTitle}`, 300, 380);
-        
-        // 核心改动：智能换行渲染
+        ctx.fillText(`TABLE ${table} / 契约已封存`, 300, 400);
+
         ctx.fillStyle = '#fff';
-        ctx.font = 'bold 28px sans-serif';
-        wrapText(ctx, lastResult, 300, 500, 440, 45);
+        ctx.font = 'bold 32px sans-serif';
+        // 简单换行
+        if(result.length > 12) {
+            ctx.fillText(result.substring(0,12), 300, 520);
+            ctx.fillText(result.substring(12), 300, 570);
+        } else {
+            ctx.fillText(result, 300, 540);
+        }
 
         ctx.font = 'italic 16px serif';
-        ctx.fillStyle = '#3a3a3a';
-        ctx.fillText('Intent is the only active ingredient.', 300, 780);
-        ctx.fillText(new Date().toLocaleDateString(), 300, 810);
+        ctx.fillStyle = isMidnight ? '#600' : '#3a3a3a';
+        ctx.fillText(isMidnight ? 'Vae Victis. (哀悯失败者)' : 'Intent is the only active ingredient.', 300, 800);
 
         document.getElementById('poster-img').src = canvas.toDataURL('image/png');
         document.getElementById('poster-overlay').style.display = 'flex';
     }
 
-    function sendOrder(table) {
-        const pushKey = "PDU40747TdeTeirMy2wQe12azBvWvUBOk9S5WjMtt";
-        const desc = encodeURIComponent(`桌:${table}\n路:${path}\n神:${god}\n比:${document.getElementById('acid').value}/${document.getElementById('sweet').value}/${document.getElementById('bitter').value}/${document.getElementById('strength').value}\n果:${lastResult}`);
-        new Image().src = `https://api2.pushdeer.com/message/push?pushkey=${pushKey}&text=Crossing订单_${table}&desp=${desc}`;
-    }
+    window.onload = checkTime;
 </script>
 </body>
 </html>
